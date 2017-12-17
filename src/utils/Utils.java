@@ -63,21 +63,8 @@ import xls.AsianUtils;
 import xls.XlSUtils;
 import xls.XlSUtils.MaximizingBy;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class Utils {
-    /**
-     * This field sets the variable of class DateFormat
-     */
 	public static final DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-    /**
-     * This field sets the variable of class String
-     */
 	public static final String TOKEN = "19f6c3cd0bd54c4286322c08734b53bd";
 	static int count = 50;
 	static long start = System.currentTimeMillis();
@@ -92,8 +79,7 @@ public class Utils {
 				count = 50;
 				start = System.currentTimeMillis();
 			} catch (InterruptedException e1) {
-				System.out.println("Something was wrong");
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 		URL url = new URL(address);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -113,29 +99,27 @@ public class Utils {
 	@SuppressWarnings("unused")
 	public static ArrayList<ExtendedFixture> createFixtureList(JSONArray arr) throws JSONException, ParseException {
 		ArrayList<ExtendedFixture> fixtures = new ArrayList<>();
-		try {
-			for (int i = 0; i < arr.length(); i++) {
-				JSONObject f = arr.getJSONObject(i);
-				String date = f.getString("date");
-				String status;
-				
+		for (int i = 0; i < arr.length(); i++) {
+			JSONObject f = arr.getJSONObject(i);
+			String date = f.getString("date");
+			String status;
+			try {
 				status = f.getString("status");
-				
-				int matchday = f.getInt("matchday");
-				String homeTeamName = f.getString("homeTeamName");
-				String awayTeamName = f.getString("awayTeamName");
-				int goalsHomeTeam = f.getJSONObject("result").getInt("goalsHomeTeam");
-				int goalsAwayTeam = f.getJSONObject("result").getInt("goalsAwayTeam");
-				String links_homeTeam = f.getJSONObject("_links").getJSONObject("homeTeam").getString("href");
-				String links_awayTeam = f.getJSONObject("_links").getJSONObject("awayTeam").getString("href");
-				String competition = f.getJSONObject("_links").getJSONObject("soccerseason").getString("href");
-	
-				ExtendedFixture ef = new ExtendedFixture(format.parse(date), homeTeamName, awayTeamName,
-						new Result(goalsHomeTeam, goalsAwayTeam), competition).withMatchday(matchday);
-				fixtures.add(ef);
+			} catch (Exception e) {
+				status = "FINISHED";
 			}
-		} catch (Exception e) {
-			status = "FINISHED";
+			int matchday = f.getInt("matchday");
+			String homeTeamName = f.getString("homeTeamName");
+			String awayTeamName = f.getString("awayTeamName");
+			int goalsHomeTeam = f.getJSONObject("result").getInt("goalsHomeTeam");
+			int goalsAwayTeam = f.getJSONObject("result").getInt("goalsAwayTeam");
+			String links_homeTeam = f.getJSONObject("_links").getJSONObject("homeTeam").getString("href");
+			String links_awayTeam = f.getJSONObject("_links").getJSONObject("awayTeam").getString("href");
+			String competition = f.getJSONObject("_links").getJSONObject("soccerseason").getString("href");
+
+			ExtendedFixture ef = new ExtendedFixture(format.parse(date), homeTeamName, awayTeamName,
+					new Result(goalsHomeTeam, goalsAwayTeam), competition).withMatchday(matchday);
+			fixtures.add(ef);
 		}
 		return fixtures;
 	}
@@ -339,7 +323,7 @@ public class Utils {
 		float fraction = line % 1;
 		int whole = (int) (line - fraction);
 
-		if (Float.compare(fraction, 0f)==0) {
+		if (fraction == 0f) {
 			// System.out.println("wins");
 			float winChance = poissonHome(lambda, mu, -whole);
 
@@ -350,7 +334,7 @@ public class Utils {
 			float away = (1f - winChance - drawChance) * asianAway + drawChance - winChance;
 			return Pair.of(home, away);
 
-		} else if (Float.compare(fraction, -0.5f)==0) {
+		} else if (fraction == -0.5f) {
 			line = whole - 1;
 			whole = (int) (line - fraction);
 			// System.out.println("wins");
@@ -360,7 +344,7 @@ public class Utils {
 			float away = (1f - winChance) * asianAway - winChance;
 			return Pair.of(home, away);
 
-		} else if (Float.compare(fraction, 0.5f)==0) {
+		} else if (fraction == 0.5f) {
 			line = (float) Math.ceil(line);
 			fraction = line % 1;
 			whole = (int) (line - fraction);
@@ -372,7 +356,7 @@ public class Utils {
 			float away = (1f - winChance) * asianAway - winChance;
 			return Pair.of(home, away);
 
-		} else if (Float.compare(fraction, -0.25f)==0) {
+		} else if (fraction == -0.25f) {
 			line = whole - 1;
 			whole = (int) (line - fraction);
 			// System.out.println("wins");
@@ -384,7 +368,7 @@ public class Utils {
 			float away = (1f - winChance - drawChance) * asianAway + drawChance * (1 + (asianAway - 1) / 2) - winChance;
 			return Pair.of(home, away);
 
-		} else if (Float.compare(fraction, 0.25f)==0) {
+		} else if (fraction == 0.25f) {
 			line = (float) Math.floor(line);
 			fraction = line % 1;
 			whole = (int) (line - fraction);
@@ -398,7 +382,7 @@ public class Utils {
 			float away = (1f - winChance - drawChance) * asianAway - drawChance / 2 - winChance;
 			return Pair.of(home, away);
 
-		} else if (Float.compare(fraction, -0.75f)==0) {
+		} else if (fraction == -0.75f) {
 			line = whole - 1;
 			fraction = line % 1;
 			whole = (int) (line - fraction);
@@ -411,7 +395,7 @@ public class Utils {
 			float away = (1f - winChance - drawChance) * asianAway - drawChance / 2 - winChance;
 			return Pair.of(home, away);
 
-		} else if (Float.compare(fraction, 0.75f)==0) {
+		} else if (fraction == 0.75f) {
 			line = (float) Math.ceil(line);
 			fraction = line % 1;
 			whole = (int) (line - fraction);
@@ -781,58 +765,60 @@ public class Utils {
 			Date next = cal.getTime();
 			if (date.equals(currDate) || date.equals(next)) {
 				curr.add(filtered.get(i));
-			}
-			if ((!date.equals(currDate) && !date.equals(next)) && (i + 1 < filtered.size())) {
-				currDate = filtered.get(i + 1).fixture.date;
-				curr.sort(new Comparator<FinalEntry>() {
-					@Override
-					public int compare(FinalEntry o1, FinalEntry o2) {
-						Float certainty1 = o1.getCOT();
-						Float certainty2 = o2.getCOT();
-						return certainty2.compareTo(certainty1);
-					}
-				});
-				boolean flag = true;
-				float coeff = 1f;
-				int successes = 0;
-				int notlosses = 0;
-				if (curr.size() >= n) {
-					// System.out.println(curr);
-					for (int j = 0; j < n; j++) {
-						if (curr.get(j).success()) {
-							coeff *= curr.get(j).prediction >= curr.get(j).upper ? curr.get(j).fixture.maxOver
-									: curr.get(j).fixture.maxUnder;
-							successes++;
-							notlosses++;
-						}
-						if (!curr.get(j).success() && ( (curr.get(j).prediction >= curr.get(j).upper
-								&& curr.get(j).fixture.getTotalGoals() == 2)
-								|| (curr.get(j).prediction <= curr.get(j).lower
-										&& curr.get(j).fixture.getTotalGoals() == 3))) {
-							notlosses++;
-							coeff = -1f;
-							break;
-						} else {
-							coeff = -1f;
-							break;
-						}
-					}
-					// System.out.println(curr.get(0).fixture.date + " " + "
-					// " + successes + " not loss: " + notlosses
-					// + " pr: " + (coeff != -1f ? (coeff - 1f) : coeff));
-					if (coeff != -1f)
-						winBets++;
-					else
-						loseBets++;
-
-					profit += (coeff != -1f ? (coeff - 1f) : coeff);
-				}
-				curr = new ArrayList<>();
 			} else {
-				break;
+				if (i + 1 < filtered.size()) {
+					currDate = filtered.get(i + 1).fixture.date;
+
+					curr.sort(new Comparator<FinalEntry>() {
+
+						@Override
+						public int compare(FinalEntry o1, FinalEntry o2) {
+							Float certainty1 = o1.getCOT();
+							Float certainty2 = o2.getCOT();
+							return certainty2.compareTo(certainty1);
+						}
+					});
+
+					boolean flag = true;
+					float coeff = 1f;
+					int successes = 0;
+					int notlosses = 0;
+					if (curr.size() >= n) {
+						// System.out.println(curr);
+						for (int j = 0; j < n; j++) {
+							if (curr.get(j).success()) {
+								coeff *= curr.get(j).prediction >= curr.get(j).upper ? curr.get(j).fixture.maxOver
+										: curr.get(j).fixture.maxUnder;
+								successes++;
+								notlosses++;
+							} else if ((curr.get(j).prediction >= curr.get(j).upper
+									&& curr.get(j).fixture.getTotalGoals() == 2)
+									|| (curr.get(j).prediction <= curr.get(j).lower
+											&& curr.get(j).fixture.getTotalGoals() == 3)) {
+								notlosses++;
+								coeff = -1f;
+								break;
+							} else {
+								coeff = -1f;
+								break;
+							}
+						}
+						// System.out.println(curr.get(0).fixture.date + " " + "
+						// " + successes + " not loss: " + notlosses
+						// + " pr: " + (coeff != -1f ? (coeff - 1f) : coeff));
+						if (coeff != -1f)
+							winBets++;
+						else
+							loseBets++;
+
+						profit += (coeff != -1f ? (coeff - 1f) : coeff);
+					}
+					curr = new ArrayList<>();
+				} else {
+					break;
+				}
 			}
 		}
-	}
 		System.out.println("Total from " + n + "s: " + profit + " " + winBets + "W " + loseBets + "L");
 
 		return profit;
@@ -993,14 +979,16 @@ public class Utils {
 		int certs = 0;
 		for (FinalEntry fe : noEquilibriums) {
 			float certainty = fe.prediction > fe.threshold ? fe.prediction : (1f - fe.prediction);
-			if (certainty >= 0f)
+			if (certainty >= 0f) {
 				certs++;
-			if (certainty >= 0f && fe.success())
+				if (fe.success()) {
 					wins++;
-			if (certainty < 0f && !fe.success() && ((fe.prediction >= fe.upper && fe.fixture.getTotalGoals() == 2)
-				 || (fe.prediction <= fe.lower && fe.fixture.getTotalGoals() == 3)))
+				} else if ((fe.prediction >= fe.upper && fe.fixture.getTotalGoals() == 2)
+						|| (fe.prediction <= fe.lower && fe.fixture.getTotalGoals() == 3)) {
 					draws++;
+				}
 			}
+		}
 
 		if (verbose)
 			System.out.println("Soft lines wins: " + format((float) wins / certs) + " draws: "
@@ -1073,27 +1061,28 @@ public class Utils {
 			float certainty = fe.getCertainty();
 			if (certainty >= 0.8f)
 				cer80.add(fe);
-			if (certainty < 0.8f && certainty >= 0.7f) 
+			else if (certainty >= 0.7f) {
 				cer70.add(fe);
-			if ( !(certainty < 0.8f && certainty >= 0.7f) && certainty >= 0.6f) 
+			} else if (certainty >= 0.6f) {
 				cer60.add(fe);
-			if (certainty >= 0.5f &&  && certainty < 0.6f) {
+			} else if (certainty >= 0.5f) {
 				cer50.add(fe);
 			} else {
 				cer40.add(fe);
 			}
 
 			float cot = fe.prediction > fe.threshold ? (fe.prediction - fe.threshold) : (fe.threshold - fe.prediction);
-			if (cot >= 0.25f)
+			if (cot >= 0.25f) {
 				cot25.add(fe);
-			if (cot >= 0.2f)
+			} else if (cot >= 0.2f) {
 				cot20.add(fe);
-			if (cot >= 0.15f)
+			} else if (cot >= 0.15f) {
 				cot15.add(fe);
-			if (cot >= 0.10f)
+			} else if (cot >= 0.10f) {
 				cot10.add(fe);
-			if (cot >= 0.05f)
+			} else if (cot >= 0.05f) {
 				cot5.add(fe);
+			}
 
 		}
 
@@ -1184,21 +1173,21 @@ public class Utils {
 
 		for (FinalEntry i : all) {
 			float value = i.getValue();
-			if (value <= 0.9f)
+			if (value <= 0.9f) {
 				under09.add(i);
-			if (value <= 1f)
+			} else if (value <= 1f) {
 				under1.add(i);
-			if (value <= 1.10f) 
+			} else if (value <= 1.10f) {
 				under110.add(i);
-			if (value <= 1.20f) 
+			} else if (value <= 1.20f) {
 				under120.add(i);
-			if (value <= 1.30f) 
+			} else if (value <= 1.30f) {
 				under130.add(i);
-			if (value <= 1.40f) 
+			} else if (value <= 1.40f) {
 				under140.add(i);
-			if (value <= 1.50f)
+			} else if (value <= 1.50f) {
 				under150.add(i);
-			if (value <= 1.60f){
+			} else if (value <= 1.60f) {
 				under160.add(i);
 			} else {
 				over160.add(i);
@@ -1270,13 +1259,14 @@ public class Utils {
 			// System.out.println(
 			// flag ? "bankrupt" : "bankroll: " + bankroll + " successrate: " +
 			// (float) yes / (all.size() / 3));
-			if (flag)
+			if (flag) {
 				failtimes++;
-			if(!flag)
+			} else {
 				total += bankroll;
-			if (!flag && bankroll < 1000f)
-				losses++;
+				if (bankroll < 1000f)
+					losses++;
 			}
+		}
 
 		System.out.println(year + " Out of " + testCount + " fails: " + failtimes + " losses " + losses + " successes: "
 				+ (testCount - failtimes - losses) + " with AVG: " + total / (testCount - failtimes));
@@ -1308,8 +1298,7 @@ public class Utils {
 				bank += betSize * (i.success() ? (gain - 1f) : -1f);
 				succ += i.success() ? 1 : 0;
 				alls++;
-			}
-			if(cal.get(Calendar.MONTH) != month){
+			} else {
 				System.out.println("Bank after month: " + (month + 1) + " is: " + bank + " unit: " + betSize
 						+ " profit: " + (bank - previous) + " in units: " + (bank - previous) / betSize + " rate: "
 						+ (float) succ / alls + "%");
@@ -1576,9 +1565,9 @@ public class Utils {
 		ArrayList<FinalEntry> shotBased = new ArrayList<>();
 		for (FinalEntry fe : finals) {
 			float shotsScore = XlSUtils.shots(fe.fixture, sheet);
-			if (fe.prediction >= fe.upper && Float.compare(shotsScore, 1f)==0) {
+			if (fe.prediction >= fe.upper && shotsScore == 1f) {
 				shotBased.add(fe);
-			} else if (fe.prediction <= fe.lower && Float.compare(shotsScore, 0f)==0) {
+			} else if (fe.prediction <= fe.lower && shotsScore == 0f) {
 				shotBased.add(fe);
 			}
 		}
@@ -2098,25 +2087,26 @@ public class Utils {
 		for (FinalEntry f : finals) {
 			boolean isOver = f.prediction > f.threshold;
 			FullEntry full = new FullEntry(f.fixture, f.prediction, f.result, f.threshold, f.lower, f.upper, null);
-			if (Float.compare(offset, 0.25f)==0 && isOver)
-				full.line = map.get(f.fixture).goalLines.line2;
-			else
-				full.line = map.get(f.fixture).goalLines.line3;
-			
-			if (Float.compare(offset, 0.5f)==0 && isOver) 
-				full.line = map.get(f.fixture).goalLines.line1;
-			else
-				full.line = map.get(f.fixture).goalLines.line4;
-			
-			if (Float.compare(offset, -0.25f)==0 && isOver) 
-				full.line = map.get(f.fixture).goalLines.line3;
-			else
-				full.line = map.get(f.fixture).goalLines.line2;
-			
-			if (Float.compare(offset, -0.5f)==0 && isOver)
-				full.line = map.get(f.fixture).goalLines.line4;
-			else
-				full.line = map.get(f.fixture).goalLines.line1;
+			if (offset == 0.25f) {
+				if (isOver)
+					full.line = map.get(f.fixture).goalLines.line2;
+				else
+					full.line = map.get(f.fixture).goalLines.line3;
+			} else if (offset == 0.5f) {
+				if (isOver)
+					full.line = map.get(f.fixture).goalLines.line1;
+				else
+					full.line = map.get(f.fixture).goalLines.line4;
+			} else if (offset == -0.25f) {
+				if (isOver)
+					full.line = map.get(f.fixture).goalLines.line3;
+				else
+					full.line = map.get(f.fixture).goalLines.line2;
+			} else if (offset == -0.5f) {
+				if (isOver)
+					full.line = map.get(f.fixture).goalLines.line4;
+				else
+					full.line = map.get(f.fixture).goalLines.line1;
 			}
 
 			fulls.add(full);
@@ -2190,7 +2180,7 @@ public class Utils {
 			// boolean isOver = f.prediction > f.threshold;
 			FullEntry full = new FullEntry(f.fixture, f.prediction, f.result, f.threshold, f.lower, f.upper, null);
 			for (Line l : map.get(f.fixture).goalLines.getArrayLines()) {
-				if (Float.compare(l.line, line)==0) {
+				if (l.line == line) {
 					full.line = l;
 					fulls.add(full);
 					continue;
@@ -2462,8 +2452,8 @@ public class Utils {
 		float awayShotsFor = avgShotsAwayTeam.home;
 		float awayShotsAgainst = avgShotsAwayTeam.away;
 
-		float lambda = Float.compare(avgAway, 0f)==0 ? 0 : homeShotsFor * awayShotsAgainst / avgAway;
-		float mu = Float.compare(avgHome, 0f)==0 ? 0 : awayShotsFor * homeShotsAgainst / avgHome;
+		float lambda = avgAway == 0 ? 0 : homeShotsFor * awayShotsAgainst / avgAway;
+		float mu = avgHome == 0 ? 0 : awayShotsFor * homeShotsAgainst / avgHome;
 
 		Pair avgShotsByType = FixtureUtils.selectAvgShotsByType(all, ef.date, manual, goalsWeight);
 		float avgShotsUnder = avgShotsByType.home;
@@ -2479,8 +2469,7 @@ public class Utils {
 		if (expected >= avgShotsOver && expected > avgShotsUnder) {
 			float score = 0.5f + 0.5f * (expected - avgShotsOver) / dist;
 			return (score >= 0 && score <= 1f) ? score : 1f;
-		}
-		if ((expected >= avgShotsOver && expected > avgShotsUnder) && expected <= avgShotsUnder && expected < avgShotsOver) {
+		} else if (expected <= avgShotsUnder && expected < avgShotsOver) {
 			float score = 0.5f - 0.5f * (-expected + avgShotsUnder) / dist;
 			return (score >= 0 && score <= 1f) ? score : 0f;
 		} else {
@@ -2571,12 +2560,13 @@ public class Utils {
 		HashMap<String, ArrayList<PlayerFixture>> players = new HashMap<>();
 		for (PlayerFixture pf : pfs) {
 			if ((reverseDictionary.get(pf.team).equals(team) || reverseDictionary.get(pf.team).equals(team))
-					&& pf.fixture.date.before(i.date))
+					&& pf.fixture.date.before(i.date)) {
+
+				if (!players.containsKey(pf.name))
+					players.put(pf.name, new ArrayList<>());
+
 				players.get(pf.name).add(pf);
-			
-			if ( ((reverseDictionary.get(pf.team).equals(team) || reverseDictionary.get(pf.team).equals(team)) && pf.fixture.date.before(i.date)) 
-				   && !players.containsKey(pf.name))
-				players.put(pf.name, new ArrayList<>());
+			}
 		}
 
 		ArrayList<Player> result = new ArrayList<>();
@@ -2588,7 +2578,7 @@ public class Utils {
 				player.assists += pf.assists;
 				if (pf.lineup)
 					player.lineups++;
-				if (!pf.lineup && pf.substitute)
+				else if (pf.substitute)
 					player.substitutes++;
 				else
 					player.subsWOP++;
@@ -2597,28 +2587,23 @@ public class Utils {
 					player.homeMinutesPlayed += pf.minutesPlayed;
 					player.homeGoals += pf.goals;
 					player.homeAssists += pf.assists;
-				} 
-				if (team.equals(pf.fixture.homeTeam) && pf.lineup)
-					player.homeLineups++;
-				if (team.equals(pf.fixture.homeTeam) && !pf.lineup && pf.substitute)
-					player.homeSubstitutes++;
-				else
-					player.homeSubsWOP++;
-				
-				
-				
-				
-				if (!team.equals(pf.fixture.homeTeam)) {
+					if (pf.lineup)
+						player.homeLineups++;
+					else if (pf.substitute)
+						player.homeSubstitutes++;
+					else
+						player.homeSubsWOP++;
+				} else {
 					player.awayMinutesPlayed += pf.minutesPlayed;
 					player.awayGoals += pf.goals;
 					player.awayAssists += pf.assists;
+					if (pf.lineup)
+						player.awayLineups++;
+					else if (pf.substitute)
+						player.awaySubstitutes++;
+					else
+						player.awaySubsWOP++;
 				}
-				if (!team.equals(pf.fixture.homeTeam) && pf.lineup)
-					player.awayLineups++;
-				if (!team.equals(pf.fixture.homeTeam) && !pf.lineup && pf.substitute)
-					player.awaySubstitutes++;
-				else
-					player.awaySubsWOP++;
 			}
 			result.add(player);
 		}
@@ -3033,18 +3018,23 @@ public class Utils {
 
 						float currentProfit, currentWinRate = 0f;
 						float currEval = 1f;
-						if (maxBy.equals(MaximizingBy.BOTH) && all.size() >= 100) {
+						if (maxBy.equals(MaximizingBy.BOTH)) {
+							if (all.size() < 100)
+								continue;
 							currentProfit = getProfitHT(all);
 							currEval = evaluateRecord(getFinals(all));
 							// currentWinRate = getSuccessRate(getFinals(all));
-						}
-						if (!maxBy.equals(MaximizingBy.BOTH) && maxBy.equals(MaximizingBy.UNDERS) && onlyUnders(getFinals(all)).size() >= 100) {
+						} else if (maxBy.equals(MaximizingBy.UNDERS)) {
+							if (onlyUnders(getFinals(all)).size() < 100)
+								continue;
 							currentProfit = getProfitHT(onlyUndersHT(all));
 							currEval = evaluateRecord(onlyUnders(getFinals(all)));
 							// currentWinRate
 							// =getSuccessRate(onlyUnders(getFinals(all)));
-						}
-						if (maxBy.equals(MaximizingBy.OVERS) && onlyOvers(getFinals(all)).size() >= 100) {
+
+						} else if (maxBy.equals(MaximizingBy.OVERS)) {
+							if (onlyOvers(getFinals(all)).size() < 100)
+								continue;
 							currentProfit = getProfitHT(onlyOversHT(all));
 							currEval = evaluateRecord(onlyOvers(getFinals(all)));
 							// currentWinRate
@@ -3089,7 +3079,7 @@ public class Utils {
 
 		if (maxBy.equals(MaximizingBy.UNDERS))
 			all = onlyUndersHT(all);
-		if (!maxBy.equals(MaximizingBy.UNDERS) && maxBy.equals(MaximizingBy.OVERS))
+		else if (maxBy.equals(MaximizingBy.OVERS))
 			all = onlyOversHT(all);
 
 		System.out.println(bestProfit);
@@ -3177,19 +3167,23 @@ public class Utils {
 
 			float currentProfit, currentWinRate = 0f;
 			float currEval = 1f;
-			if (maxBy.equals(MaximizingBy.BOTH) && all.size() >= 100) {
+			if (maxBy.equals(MaximizingBy.BOTH)) {
+				if (all.size() < 100)
+					continue;
 				currentProfit = getProfitHT(all);
 				currEval = evaluateRecord(getFinals(all));
 				// currentWinRate = getSuccessRate(getFinals(all));
-			}
-			if (maxBy.equals(MaximizingBy.UNDERS) && onlyUnders(getFinals(all)).size() >= 100) {
+			} else if (maxBy.equals(MaximizingBy.UNDERS)) {
+				if (onlyUnders(getFinals(all)).size() < 100)
+					continue;
 				currentProfit = getProfitHT(onlyUndersHT(all));
 				currEval = evaluateRecord(onlyUnders(getFinals(all)));
 				// currentWinRate
 				// =getSuccessRate(onlyUnders(getFinals(all)));
 
-			}
-			if (maxBy.equals(MaximizingBy.OVERS) && onlyOvers(getFinals(all)).size() >= 100) {
+			} else if (maxBy.equals(MaximizingBy.OVERS)) {
+				if (onlyOvers(getFinals(all)).size() < 100)
+					continue;
 				currentProfit = getProfitHT(onlyOversHT(all));
 				currEval = evaluateRecord(onlyOvers(getFinals(all)));
 				// currentWinRate
@@ -3227,7 +3221,7 @@ public class Utils {
 
 		if (maxBy.equals(MaximizingBy.UNDERS))
 			all = onlyUndersHT(all);
-		if (!maxBy.equals(MaximizingBy.UNDERS) && maxBy.equals(MaximizingBy.OVERS))
+		else if (maxBy.equals(MaximizingBy.OVERS))
 			all = onlyOversHT(all);
 
 		System.out.println(bestProfit);

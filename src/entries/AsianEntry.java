@@ -4,17 +4,7 @@ import main.ExtendedFixture;
 import results.Results;
 import utils.Utils;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class AsianEntry {
-    /**
-     * This field sets the variable of class ExtendedFixture
-     */
 	public ExtendedFixture fixture;
 	public boolean prediction;
 	public float line;
@@ -44,24 +34,30 @@ public class AsianEntry {
 		int result = fixture.result.goalsHomeTeam - fixture.result.goalsAwayTeam;
 		float diff = result + line;
 
-		if (prediction && diff >= 0.5f){
-			return "W";
-		} else if (prediction && Float.compare(diff, 0.25f)==0) {
-			return "HW";
-		} else if (prediction && Float.compare(diff, 0f)==0) {
-			return "D";
-		} else if (prediction && Float.compare(diff, -0.25f)==0) {
-			return "HL";
-		} else if (!prediction && diff >= 0.5f){
-			return "L";
-	    } else if (!prediction && Float.compare(diff, 0.25f)==0) {
-			return "HL";
-		} else if (!prediction && Float.compare(diff, 0f)==0) {
-			return "D";
-		} else if (!prediction && Float.compare(diff, -0.25f)==0) {
-			return "HW";
+		if (prediction) {
+			if (diff >= 0.5f)
+				return "W";
+			else if (diff == 0.25f) {
+				return "HW";
+			} else if (diff == 0f) {
+				return "D";
+			} else if (diff == -0.25f) {
+				return "HL";
+			} else {
+				return "L";
+			}
 		} else {
-			return "W";
+			if (diff >= 0.5f)
+				return "L";
+			else if (diff == 0.25f) {
+				return "HL";
+			} else if (diff == 0f) {
+				return "D";
+			} else if (diff == -0.25f) {
+				return "HW";
+			} else {
+				return "W";
+			}
 		}
 	}
 

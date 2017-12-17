@@ -2,13 +2,6 @@ package main;
 
 import java.util.Date;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class TimeLine extends Line {
 
 	public Date time;

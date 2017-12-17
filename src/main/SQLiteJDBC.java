@@ -21,17 +21,8 @@ import utils.Lines;
 import utils.Utils;
 import xls.XlSUtils;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class SQLiteJDBC {
-    /**
-     * This field sets the variable of class DateFormat
-     */
+
 	public static final DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
 	public static void createDB() {
@@ -40,7 +31,7 @@ public class SQLiteJDBC {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:test.db");
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		// System.out.println("Opened database successfully");
@@ -64,7 +55,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		// System.out.println("Table created successfully");
@@ -97,12 +88,11 @@ public class SQLiteJDBC {
 			c.commit();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			try {
 				c.close();
 			} catch (SQLException e1) {
-				System.out.println("Something was wrong");
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 			System.exit(0);
 		}
@@ -142,7 +132,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		// System.out.println("Operation done successfully");
@@ -182,7 +172,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		// System.out.println("Operation done successfully");
@@ -222,7 +212,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		// System.out.println("Operation done successfully");
@@ -250,7 +240,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 
@@ -277,7 +267,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		return leagues;
@@ -315,7 +305,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		// System.out.println("Operation done successfully");
@@ -341,7 +331,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		return average;
@@ -365,7 +355,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		return average;
@@ -389,7 +379,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		return average;
@@ -413,7 +403,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		return average;
@@ -437,7 +427,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		return average;
@@ -461,7 +451,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 		return average;
@@ -489,8 +479,7 @@ public class SQLiteJDBC {
 				}
 			}
 		} catch (IOException | JSONException e) {
-			System.out.println("Something was wrong");
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -515,8 +504,7 @@ public class SQLiteJDBC {
 				}
 			}
 		} catch (IOException | JSONException e) {
-			System.out.println("Something was wrong");
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -548,12 +536,11 @@ public class SQLiteJDBC {
 			c.commit();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			try {
 				c.close();
 			} catch (SQLException e1) {
-				System.out.println("Something was wrong");
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 			System.exit(0);
 		}
@@ -584,12 +571,11 @@ public class SQLiteJDBC {
 			c.commit();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			try {
 				c.close();
 			} catch (SQLException e1) {
-				System.out.println("Something was wrong");
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 			System.exit(0);
 		}
@@ -632,7 +618,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 
@@ -666,7 +652,7 @@ public class SQLiteJDBC {
 			c.commit();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 
@@ -700,7 +686,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 
@@ -716,44 +702,42 @@ public class SQLiteJDBC {
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			try {
-				for (ExtendedFixture f : all) {
-					float score = Float.NaN;
-					if (tableName.equals("BASICS")) {
-						score = XlSUtils.basic2(f, sheet, 0.6f, 0.3f, 0.1f);
-					} else if (tableName.equals("POISSON")) {
-						score = XlSUtils.poisson(f, sheet);
-					} else if (tableName.equals("WEIGHTED")) {
-						score = XlSUtils.poissonWeighted(f, sheet);
-					} else if (tableName.equals("HALFTIME1")) {
-						score = XlSUtils.halfTimeOnly(f, sheet, 1);
-					} else if (tableName.equals("HALFTIME2")) {
-						score = XlSUtils.halfTimeOnly(f, sheet, 2);
-					} else if (tableName.equals("SHOTS")) {
-						score = XlSUtils.shots(f, sheet);
-					}
-	
-					String sql = "INSERT INTO " + tableName + " (DATE,HOMETEAMNAME,AWAYTEAMNAME,YEAR,COMPETITION,SCORE)"
-							+ "VALUES (" + addQuotes(format.format(f.date)) + "," + addQuotes(f.homeTeam) + ","
-							+ addQuotes(f.awayTeam) + "," + year + "," + addQuotes(f.competition) + "," + score + " );";
-					
+			for (ExtendedFixture f : all) {
+				float score = Float.NaN;
+				if (tableName.equals("BASICS")) {
+					score = XlSUtils.basic2(f, sheet, 0.6f, 0.3f, 0.1f);
+				} else if (tableName.equals("POISSON")) {
+					score = XlSUtils.poisson(f, sheet);
+				} else if (tableName.equals("WEIGHTED")) {
+					score = XlSUtils.poissonWeighted(f, sheet);
+				} else if (tableName.equals("HALFTIME1")) {
+					score = XlSUtils.halfTimeOnly(f, sheet, 1);
+				} else if (tableName.equals("HALFTIME2")) {
+					score = XlSUtils.halfTimeOnly(f, sheet, 2);
+				} else if (tableName.equals("SHOTS")) {
+					score = XlSUtils.shots(f, sheet);
+				}
+
+				String sql = "INSERT INTO " + tableName + " (DATE,HOMETEAMNAME,AWAYTEAMNAME,YEAR,COMPETITION,SCORE)"
+						+ "VALUES (" + addQuotes(format.format(f.date)) + "," + addQuotes(f.homeTeam) + ","
+						+ addQuotes(f.awayTeam) + "," + year + "," + addQuotes(f.competition) + "," + score + " );";
+				try {
 					if (!Float.isNaN(score))
 						stmt.executeUpdate(sql);
+				} catch (SQLException e) {
+					System.out.println("tuka");
 				}
-			} catch (SQLException e) {
-				System.out.println("tuka");
 			}
 
 			stmt.close();
 			c.commit();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			try {
 				c.close();
 			} catch (SQLException e1) {
-				System.out.println("Something was wrong");
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 			System.exit(0);
 		}
@@ -770,38 +754,35 @@ public class SQLiteJDBC {
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			try {
-				for (FinalEntry f : finals) {
-	
-					String sql = "INSERT INTO FINALS "
-							+ "(DESCRIPTION,YEAR,DATE,COMPETITION,MATCHDAY,HOMETEAMNAME,AWAYTEAMNAME,HOMEGOALS,AWAYGOALS,OVER,UNDER,SCORE,THOLD,LOWER,UPPER,VALUE)"
-							+ "VALUES (" + addQuotes(description) + "," + year + ","
-							+ addQuotes(format.format(f.fixture.date)) + "," + addQuotes(competition) + ","
-							+ f.fixture.matchday + "," + addQuotes(f.fixture.homeTeam) + "," + addQuotes(f.fixture.awayTeam)
-							+ "," + f.fixture.result.goalsHomeTeam + "," + f.fixture.result.goalsAwayTeam + ","
-							+ f.fixture.maxOver + "," + f.fixture.maxUnder + ","
-							+ (float) Math.round(f.prediction * 100000f) / 100000f + "," + f.threshold + "," + f.lower + ","
-							+ f.upper + "," + f.value + " );";
-					
+			for (FinalEntry f : finals) {
+
+				String sql = "INSERT INTO FINALS "
+						+ "(DESCRIPTION,YEAR,DATE,COMPETITION,MATCHDAY,HOMETEAMNAME,AWAYTEAMNAME,HOMEGOALS,AWAYGOALS,OVER,UNDER,SCORE,THOLD,LOWER,UPPER,VALUE)"
+						+ "VALUES (" + addQuotes(description) + "," + year + ","
+						+ addQuotes(format.format(f.fixture.date)) + "," + addQuotes(competition) + ","
+						+ f.fixture.matchday + "," + addQuotes(f.fixture.homeTeam) + "," + addQuotes(f.fixture.awayTeam)
+						+ "," + f.fixture.result.goalsHomeTeam + "," + f.fixture.result.goalsAwayTeam + ","
+						+ f.fixture.maxOver + "," + f.fixture.maxUnder + ","
+						+ (float) Math.round(f.prediction * 100000f) / 100000f + "," + f.threshold + "," + f.lower + ","
+						+ f.upper + "," + f.value + " );";
+				try {
 					if (!Float.isNaN(f.prediction))
 						stmt.executeUpdate(sql);
-				}
-			} catch (SQLException e) {
-					System.out.println("Something was wrong");
-					//e.printStackTrace();
+				} catch (SQLException e) {
+					e.printStackTrace();
 					System.out.println("tuka");
 				}
+			}
 
 			stmt.close();
 			c.commit();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			try {
 				c.close();
 			} catch (SQLException e1) {
-				System.out.println("Something was wrong");
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 			System.exit(0);
 		}
@@ -818,39 +799,37 @@ public class SQLiteJDBC {
 			int success = 0;
 			int fails = 0;
 			stmt = c.createStatement();
-			try {
-				for (PlayerFixture f : finals) {
-					String sql = "INSERT INTO PLAYERFIXTURES "
-							+ "(DATE,HOMETEAMNAME,AWAYTEAMNAME,HOMEGOALS,AWAYGOALS,YEAR,COMPETITION,TEAM,NAME,MINUTESPLAYED,LINEUP,SUBSTITUTE,GOALS,ASSISTS)"
-							+ "VALUES (" + addQuotes(format.format(f.fixture.date)) + "," + addQuotes(f.fixture.homeTeam)
-							+ "," + addQuotes(f.fixture.awayTeam) + "," + f.fixture.result.goalsHomeTeam + ","
-							+ f.fixture.result.goalsAwayTeam + "," + year + "," + addQuotes(competition) + ","
-							+ addQuotes(f.team) + "," + addQuotes(f.name) + "," + f.minutesPlayed + "," + (f.lineup ? 1 : 0)
-							+ "," + (f.substitute ? 1 : 0) + "," + f.goals + "," + f.assists + " );";
-					
+			for (PlayerFixture f : finals) {
+				String sql = "INSERT INTO PLAYERFIXTURES "
+						+ "(DATE,HOMETEAMNAME,AWAYTEAMNAME,HOMEGOALS,AWAYGOALS,YEAR,COMPETITION,TEAM,NAME,MINUTESPLAYED,LINEUP,SUBSTITUTE,GOALS,ASSISTS)"
+						+ "VALUES (" + addQuotes(format.format(f.fixture.date)) + "," + addQuotes(f.fixture.homeTeam)
+						+ "," + addQuotes(f.fixture.awayTeam) + "," + f.fixture.result.goalsHomeTeam + ","
+						+ f.fixture.result.goalsAwayTeam + "," + year + "," + addQuotes(competition) + ","
+						+ addQuotes(f.team) + "," + addQuotes(f.name) + "," + f.minutesPlayed + "," + (f.lineup ? 1 : 0)
+						+ "," + (f.substitute ? 1 : 0) + "," + f.goals + "," + f.assists + " );";
+				try {
 					stmt.executeUpdate(sql);
 					// success++;
+				} catch (SQLException e) {
+					fails++;
+					e.printStackTrace();
+					// System.out.println(success + " succ " + fails + "
+					// failed");
+					// System.out.println(sql);
+					// break;
+
 				}
-			} catch (SQLException e) {
-				fails++;
-				System.out.println("Something was wrong");
-				//e.printStackTrace();
-				// System.out.println(success + " succ " + fails + "
-				// failed");
-				// System.out.println(sql);
-				// break;
 			}
 
 			stmt.close();
 			c.commit();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			try {
 				c.close();
 			} catch (SQLException e1) {
-				System.out.println("Something was wrong");
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 			System.exit(0);
 		}
@@ -896,7 +875,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 
@@ -946,7 +925,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 
@@ -1000,7 +979,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 
@@ -1041,7 +1020,7 @@ public class SQLiteJDBC {
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 
@@ -1060,39 +1039,36 @@ public class SQLiteJDBC {
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			try {
-				for (HTEntry f : halftimeData) {
+			for (HTEntry f : halftimeData) {
 
-					String sql = "INSERT INTO HALFTIMEDATA "
-							+ "(DESCRIPTION,YEAR,DATE,COMPETITION,MATCHDAY,HOMETEAMNAME,AWAYTEAMNAME,HOMEGOALS,AWAYGOALS,OVER,UNDER,SCORE,THOLD,LOWER,UPPER,VALUE,ZERO,ONE,TWO,MORE)"
-							+ "VALUES (" + addQuotes(description) + "," + year + ","
-							+ addQuotes(format.format(f.fe.fixture.date)) + "," + addQuotes(competition) + ","
-							+ f.fe.fixture.matchday + "," + addQuotes(f.fe.fixture.homeTeam) + ","
-							+ addQuotes(f.fe.fixture.awayTeam) + "," + f.fe.fixture.result.goalsHomeTeam + ","
-							+ f.fe.fixture.result.goalsAwayTeam + "," + f.fe.fixture.maxOver + "," + f.fe.fixture.maxUnder
-							+ "," + (float) Math.round(f.fe.prediction * 100000f) / 100000f + "," + f.fe.threshold + ","
-							+ f.fe.lower + "," + f.fe.upper + "," + f.fe.value + "," + f.zero + "," + f.one + "," + f.two
-							+ "," + f.more + " );";
-					
+				String sql = "INSERT INTO HALFTIMEDATA "
+						+ "(DESCRIPTION,YEAR,DATE,COMPETITION,MATCHDAY,HOMETEAMNAME,AWAYTEAMNAME,HOMEGOALS,AWAYGOALS,OVER,UNDER,SCORE,THOLD,LOWER,UPPER,VALUE,ZERO,ONE,TWO,MORE)"
+						+ "VALUES (" + addQuotes(description) + "," + year + ","
+						+ addQuotes(format.format(f.fe.fixture.date)) + "," + addQuotes(competition) + ","
+						+ f.fe.fixture.matchday + "," + addQuotes(f.fe.fixture.homeTeam) + ","
+						+ addQuotes(f.fe.fixture.awayTeam) + "," + f.fe.fixture.result.goalsHomeTeam + ","
+						+ f.fe.fixture.result.goalsAwayTeam + "," + f.fe.fixture.maxOver + "," + f.fe.fixture.maxUnder
+						+ "," + (float) Math.round(f.fe.prediction * 100000f) / 100000f + "," + f.fe.threshold + ","
+						+ f.fe.lower + "," + f.fe.upper + "," + f.fe.value + "," + f.zero + "," + f.one + "," + f.two
+						+ "," + f.more + " );";
+				try {
 					if (!Float.isNaN(f.fe.prediction))
 						stmt.executeUpdate(sql);
+				} catch (SQLException e) {
+					e.printStackTrace();
+					System.out.println("tuka");
 				}
-			} catch (SQLException e) {
-				System.out.println("Something was wrong");
-				//e.printStackTrace();
-				System.out.println("tuka");
 			}
 
 			stmt.close();
 			c.commit();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			try {
 				c.close();
 			} catch (SQLException e1) {
-				System.out.println("Something was wrong");
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 			System.exit(0);
 		}
@@ -1108,39 +1084,36 @@ public class SQLiteJDBC {
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			try {
-				for (AllEntry f : halftimeData) {
-					String sql = "INSERT INTO ALLDATA "
-							+ "(DESCRIPTION,YEAR,DATE,COMPETITION,MATCHDAY,HOMETEAMNAME,AWAYTEAMNAME,HOMEGOALS,AWAYGOALS,OVER,UNDER,SCORE,THOLD,LOWER,UPPER,VALUE,ZERO,ONE,TWO,MORE,BASIC,POISSON,WEIGHTED,SHOTS)"
-							+ "VALUES (" + addQuotes(description) + "," + year + ","
-							+ addQuotes(format.format(f.fe.fixture.date)) + "," + addQuotes(competition) + ","
-							+ f.fe.fixture.matchday + "," + addQuotes(f.fe.fixture.homeTeam) + ","
-							+ addQuotes(f.fe.fixture.awayTeam) + "," + f.fe.fixture.result.goalsHomeTeam + ","
-							+ f.fe.fixture.result.goalsAwayTeam + "," + f.fe.fixture.maxOver + "," + f.fe.fixture.maxUnder
-							+ "," + (float) Math.round(f.fe.prediction * 100000f) / 100000f + "," + f.fe.threshold + ","
-							+ f.fe.lower + "," + f.fe.upper + "," + f.fe.value + "," + f.zero + "," + f.one + "," + f.two
-							+ "," + f.more + ","+ f.basic + "," + f.poisson + "," + f.weighted + "," + f.shots + " );";
-					
-						if (!Float.isNaN(f.fe.prediction))
-							stmt.executeUpdate(sql);
-				
+			for (AllEntry f : halftimeData) {
+
+				String sql = "INSERT INTO ALLDATA "
+						+ "(DESCRIPTION,YEAR,DATE,COMPETITION,MATCHDAY,HOMETEAMNAME,AWAYTEAMNAME,HOMEGOALS,AWAYGOALS,OVER,UNDER,SCORE,THOLD,LOWER,UPPER,VALUE,ZERO,ONE,TWO,MORE,BASIC,POISSON,WEIGHTED,SHOTS)"
+						+ "VALUES (" + addQuotes(description) + "," + year + ","
+						+ addQuotes(format.format(f.fe.fixture.date)) + "," + addQuotes(competition) + ","
+						+ f.fe.fixture.matchday + "," + addQuotes(f.fe.fixture.homeTeam) + ","
+						+ addQuotes(f.fe.fixture.awayTeam) + "," + f.fe.fixture.result.goalsHomeTeam + ","
+						+ f.fe.fixture.result.goalsAwayTeam + "," + f.fe.fixture.maxOver + "," + f.fe.fixture.maxUnder
+						+ "," + (float) Math.round(f.fe.prediction * 100000f) / 100000f + "," + f.fe.threshold + ","
+						+ f.fe.lower + "," + f.fe.upper + "," + f.fe.value + "," + f.zero + "," + f.one + "," + f.two
+						+ "," + f.more + ","+ f.basic + "," + f.poisson + "," + f.weighted + "," + f.shots + " );";
+				try {
+					if (!Float.isNaN(f.fe.prediction))
+						stmt.executeUpdate(sql);
+				} catch (SQLException e) {
+					e.printStackTrace();
+					System.out.println("tuka");
 				}
-			} catch (SQLException e) {
-				System.out.println("Something was wrong");
-				//e.printStackTrace();
-				System.out.println("tuka");
 			}
 
 			stmt.close();
 			c.commit();
 			c.close();
 		} catch (Exception e) {
-			System.err.println("Something was wrong");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			try {
 				c.close();
 			} catch (SQLException e1) {
-				System.out.println("Something was wrong");
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 			System.exit(0);
 		}

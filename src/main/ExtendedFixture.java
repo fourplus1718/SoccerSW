@@ -2,105 +2,29 @@ package main;
 
 import java.util.Date;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class ExtendedFixture implements Comparable<ExtendedFixture> {
-    /**
-     * This field sets the date variable
-     */
 	public Date date;
-    /**
-     * This field sets the int variable
-     */
 	public int year;
-    /**
-     * This field sets the String variable
-     */
 	public String homeTeam;
-    /**
-     * This field sets the String variable
-     */
 	public String awayTeam;
-    /**
-     * This field sets the Result variable
-     */
 	public Result result;
-    /**
-     * This field sets the Result variable
-     */
 	public Result HTresult;
-    /**
-     * This field sets the String variable
-     */
 	public String status;
-    /**
-     * This field sets the String variable
-     */
 	public String competition;
-    /**
-     * This field sets the int variable
-     */
 	public int matchday;
-    /**
-     * This field sets the float variable
-     */
 	public float overOdds;
-    /**
-     * This field sets the float variable
-     */
 	public float underOdds;
-    /**
-     * This field sets the float variable
-     */
 	public float maxOver;
-    /**
-     * This field sets the float variable
-     */
 	public float maxUnder;
-    /**
-     * This field sets the float variable
-     */
 	public float homeOdds;
-    /**
-     * This field sets the float variable
-     */
 	public float drawOdds;
-    /**
-     * This field sets the float variable
-     */
 	public float awayOdds;
-    /**
-     * This field sets the int variable
-     */
 	public int shotsHome;
-    /**
-     * This field sets the int variable
-     */
 	public int shotsAway;
-    /**
-     * This field sets the float variable
-     */
 	public float line;
-    /**
-     * This field sets the float variable
-     */
 	public float asianHome;
-    /**
-     * This field sets the float variable
-     */
 	public float asianAway;
-    /**
-     * This field sets the int variable
-     */
 	public int redHome;
-    /**
-     * This field sets the int variable
-     */
 	public int redAway;
 	
 
@@ -221,20 +145,21 @@ public class ExtendedFixture implements Comparable<ExtendedFixture> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		
 		ExtendedFixture other = (ExtendedFixture) obj;
-		
-		if (awayTeam == null && other.awayTeam != null)
+		if (awayTeam == null) {
+			if (other.awayTeam != null)
+				return false;
+		} else if (!awayTeam.equals(other.awayTeam))
 			return false;
-		if (awayTeam != null && !awayTeam.equals(other.awayTeam))
+		if (date == null) {
+			if (other.date != null)
+				return false;
+		} else if (!date.equals(other.date))
 			return false;
-		if (date == null && other.date != null)
-			return false;
-		if (date != null && !date.equals(other.date))
-			return false;
-		if (homeTeam == null && other.homeTeam != null)
-			return false;
-		if (homeTeam != null && !homeTeam.equals(other.homeTeam))
+		if (homeTeam == null) {
+			if (other.homeTeam != null)
+				return false;
+		} else if (!homeTeam.equals(other.homeTeam))
 			return false;
 		return true;
 	}

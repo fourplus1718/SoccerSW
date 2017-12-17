@@ -2,22 +2,9 @@ package main;
 
 import java.util.Date;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
-
 public class FullFixture extends ExtendedFixture {
-    /**
-     * This field sets the variable of class AsianLines
-     */
+
 	public AsianLines asianLines;
-    /**
-     * This field sets the float variable GoalLines
-     */
 	public GoalLines goalLines;
 
 	public FullFixture(Date date, String homeTeam, String awayTeam, Result result, String competition) {

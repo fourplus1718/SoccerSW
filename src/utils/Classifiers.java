@@ -11,14 +11,6 @@ import constants.MinMaxOdds;
 import main.ExtendedFixture;
 import xls.XlSUtils;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
-
 public class Classifiers {
 
 	public static float shots(ExtendedFixture f, ArrayList<ExtendedFixture> all) {
@@ -39,8 +31,8 @@ public class Classifiers {
 		float awayShotsFor = avgShotsAwayTeam.home;
 		float awayShotsAgainst = avgShotsAwayTeam.away;
 
-		float lambda = Float.compare(avgAway, 0f)==0 ? 0 : homeShotsFor * awayShotsAgainst / avgAway;
-		float mu = Float.compare(avgHome, 0f)==0 ? 0 : awayShotsFor * homeShotsAgainst / avgHome;
+		float lambda = avgAway == 0 ? 0 : homeShotsFor * awayShotsAgainst / avgAway;
+		float mu = avgHome == 0 ? 0 : awayShotsFor * homeShotsAgainst / avgHome;
 
 		Pair avgShotsByType = FixtureUtils.selectAvgShotsByType(all, f.date, manual, goalsWeight);
 		float avgShotsUnder = avgShotsByType.home;
@@ -55,12 +47,10 @@ public class Classifiers {
 		if (expected >= avgShotsOver && expected > avgShotsUnder) {
 			float score = 0.5f + 0.5f * (expected - avgShotsOver) / dist;
 			return (score >= 0 && score <= 1f) ? score : 1f;
-		} 
-		if (expected <= avgShotsUnder && expected < avgShotsOver) {
+		} else if (expected <= avgShotsUnder && expected < avgShotsOver) {
 			float score = 0.5f - 0.5f * (-expected + avgShotsUnder) / dist;
 			return (score >= 0 && score <= 1f) ? score : 0f;
-		} 
-		else {
+		} else {
 			return 0.5f;
 		}
 	}

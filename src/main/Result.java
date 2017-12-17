@@ -1,20 +1,7 @@
 package main;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class Result {
-    /**
-     * This field sets the int variable
-     */
 	public int goalsHomeTeam;
-    /**
-     * This field sets the int variable
-     */
 	public int goalsAwayTeam;
 
 	public Result(int goalsHomeTeam, int goalsAwayTeam) {

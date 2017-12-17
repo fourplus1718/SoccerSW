@@ -2,18 +2,7 @@ package entries;
 
 import main.ExtendedFixture;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
-
-public class Entry implements Comparable<Entry> { 
-    /**
-     * This field sets the variable of class ExtendedFixture
-     */
+public class Entry implements Comparable<Entry> {
 	public ExtendedFixture fixture;
 	Float result;
 	String alg;

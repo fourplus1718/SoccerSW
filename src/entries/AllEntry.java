@@ -1,17 +1,6 @@
 package entries;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
-
 public class AllEntry {
-    /**
-     * This field sets the variable of class final entry
-     */
 	public FinalEntry fe;
 	public float zero;
 	public float one;

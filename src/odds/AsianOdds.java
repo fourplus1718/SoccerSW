@@ -2,26 +2,10 @@ package odds;
 
 import java.util.Date;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
-
 public class AsianOdds extends Odds {
-    /**
-     * This field sets the float variable
-     */
+
 	public float line;
-    /**
-     * This field sets the float variable
-     */
 	public float homeOdds;
-    /**
-     * This field sets the float variable
-     */
 	public float awayOdds;
 
 	public AsianOdds(String bookmaker, Date date, float line, float homeOdds, float awayOdds) {

@@ -62,33 +62,11 @@ import runner.UpdateRunner;
 import utils.Utils;
 import xls.XlSUtils;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 36 Changes done
- */
 public class Scraper {
-    /**
-     * This field sets the variable of class DateFormat
-     */
 	public static final DateFormat OPTAFORMAT = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
-    /**
-     * This field sets the variable of class DateFormat
-     */
 	public static final DateFormat FORMATFULL = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.US);
-    /**
-     * This field sets the variable of class String
-     */
 	public static final String BASE = "http://int.soccerway.com/";
-    /**
-     * This field sets the variable of class String
-     */
 	public static final String OUSUFFIX = "#over-under;2;2.50;0";
-    /**
-     * This field sets the final int variable
-     */
 	public static final int CURRENT_YEAR = 2017;
 
 	public static void main(String[] args)
@@ -183,7 +161,7 @@ public class Scraper {
 		ArrayList<PlayerFixture> result = new ArrayList<>();
 		Set<PlayerFixture> set = new HashSet<>();
 
-		System.setProperty("webdriver.chrome.drive", "chromedriver.exe");
+		System.setProperty("webdriver.chrome.drive", "C:/Windows/system32/chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
@@ -262,22 +240,10 @@ public class Scraper {
 		int collectYear = Arrays.asList(EntryPoints.SUMMER).contains(competition) ? EntryPoints.SUMMERCURRENT
 				: EntryPoints.CURRENT;
 
-		FileInputStream file;
-		try {
-			file = new FileInputStream(new File(base + "\\data\\odds" + collectYear + ".xls"));
-			HSSFWorkbook workbook = new HSSFWorkbook(file);
-			HSSFSheet sh = workbook.getSheet(competition);
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+		FileInputStream file = new FileInputStream(new File(base + "\\data\\odds" + collectYear + ".xls"));
+
+		HSSFWorkbook workbook = new HSSFWorkbook(file);
+		HSSFSheet sh = workbook.getSheet(competition);
 
 		ArrayList<ExtendedFixture> all = sh == null ? new ArrayList<>() : XlSUtils.selectAll(sh, 0);
 		// problem when no pendingma fixtures?
@@ -291,16 +257,15 @@ public class Scraper {
 		ArrayList<ExtendedFixture> list = new ArrayList<>();
 		int count = 0;
 		int maxTries = 1;
-		
-		try {
-			 while (true) {
+		while (true) {
+			try {
 				list = collectUpToDate(competition, collectYear, Utils.getYesterday(oldestTocheck), null);
 				break;
-			 }
 			} catch (Exception e) {
 				if (++count == maxTries)
 					throw e;
 			}
+		}
 
 		System.out.println(list.size() + "shots");
 
@@ -379,7 +344,7 @@ public class Scraper {
 
 		Set<ExtendedFixture> result = new HashSet<>();
 
-		System.setProperty("webdriver.chrome.drive", "chromedriver.exe");
+		System.setProperty("webdriver.chrome.drive", "C:/Windows/system32/chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
@@ -393,13 +358,15 @@ public class Scraper {
 		int maxPage = 1;
 		List<WebElement> pages = driver.findElements(By.cssSelector("a[href*='#/page/']"));
 		for (WebElement i : pages) {
-			if (isNumeric(i.getText()) && Integer.parseInt(i.getText().trim()) > maxPage)
-				maxPage = Integer.parseInt(i.getText().trim());
+			if (isNumeric(i.getText())) {
+				if (Integer.parseInt(i.getText().trim()) > maxPage)
+					maxPage = Integer.parseInt(i.getText().trim());
+			}
 		}
 
 		boolean breakFlag = false;
-		try {
-			for (int page = 1; page <= maxPage; page++) {
+		for (int page = 1; page <= maxPage; page++) {
+			try {
 				driver.navigate().to(address + "/results/#/page/" + page + "/");
 
 				String[] splitAddress = address.split("/");
@@ -409,23 +376,25 @@ public class Scraper {
 				for (WebElement i : list) {
 					// better logic here?
 					Thread.sleep(100);
-					if (i.getText().contains("-") && isFixtureLink(i.getAttribute("href")))
-						links.add(i.getAttribute("href"));
-					
+					if (i.getText().contains("-"))
+						if (isFixtureLink(i.getAttribute("href")))
+							links.add(i.getAttribute("href"));
+				}
+
 				for (String i : links) {
 					ExtendedFixture ef = getOddsFixture(driver, i, competition, false, OnlyTodayMatches.FALSE);
 
-					if (ef != null && ef.date.before(yesterday)) {
-						breakFlag = true;
-						break;
-					}
-					result.add(ef);
+					if (ef != null) {
+						if (ef.date.before(yesterday)) {
+							breakFlag = true;
+							break;
 						}
+						result.add(ef);
 					}
+
 				}
 			} catch (Exception e) {
-				System.out.println("Something was wrong");
-				//e.printStackTrace();
+				e.printStackTrace();
 				page--;
 				System.out.println("Starting over from page:" + page);
 				driver.close();
@@ -444,6 +413,7 @@ public class Scraper {
 				break;
 			}
 
+		}
 
 		driver.close();
 
@@ -462,7 +432,7 @@ public class Scraper {
 			System.out.println(address);
 		} else
 			address = add;
-		System.setProperty("webdriver.chrome.drive", "chromedriver.exe");
+		System.setProperty("webdriver.chrome.drive", "C:/Windows/system32/chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
@@ -538,7 +508,7 @@ public class Scraper {
 		ArrayList<ExtendedFixture> result = new ArrayList<>();
 		Set<String> teams = new HashSet<>();
 
-		System.setProperty("webdriver.chrome.drive", "chromedriver.exe");
+		System.setProperty("webdriver.chrome.drive", "C:/Windows/system32/chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
@@ -596,7 +566,7 @@ public class Scraper {
 		} else
 			address = add;
 
-		System.setProperty("webdriver.chrome.drive", "chromedriver.exe");
+		System.setProperty("webdriver.chrome.drive", "C:/Windows/system32/chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
@@ -662,7 +632,7 @@ public class Scraper {
 		} else
 			address = add;
 
-		System.setProperty("webdriver.chrome.drive", "chromedriver.exe");
+		System.setProperty("webdriver.chrome.drive", "C:/Windows/system32/chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
@@ -674,19 +644,19 @@ public class Scraper {
 			Document matches = Jsoup.parse(html);
 
 			Elements linksM = matches.select("a[href]");
-			for (Element linkM : linksM && isScore(linkM.text()) {
+			for (Element linkM : linksM) {
+				if (isScore(linkM.text())) {
 					// Thread.sleep(50);
 					// System.out.println(linkM.text());
 					int count = 0;
 					int maxTries = 10;
-					try {
-						while (true) {
+					while (true) {
+						try {
 							Document fixture = Jsoup.connect(BASE + linkM.attr("href")).timeout(30 * 1000).get();
 							ArrayList<PlayerFixture> ef = getFixtureFull(fixture, competition);
 							fixtureCount++;
 							result.addAll(ef);
 							break;
-							}
 						} catch (Exception e) {
 							if (++count == maxTries)
 								throw e;
@@ -694,6 +664,7 @@ public class Scraper {
 					}
 					// set.addAll(ef);
 					// break;
+				}
 			}
 
 			driver.findElement(By.className("previous")).click();
@@ -746,7 +717,7 @@ public class Scraper {
 		try {
 			matchday = Integer.parseInt(fixture.select("dt:contains(Game week) + dd").first().text());
 		} catch (Exception e) {
-			
+
 		}
 
 		String iframe;
@@ -754,19 +725,19 @@ public class Scraper {
 		int shotsHome = -1, shotsAway = -1;
 
 		Elements frames = fixture.select("iframe");
-		try {
+		for (Element i : frames) {
+			if (i.attr("src").contains("/charts/statsplus")) {
 				Document stats = Jsoup.connect(BASE + i.attr("src")).timeout(0).get();
-				for (Element i : frames && i.attr("src").contains("/charts/statsplus")) {
+				try {
 					shotsHome = Integer.parseInt(
 							stats.select("tr:contains(Shots on target)").get(1).select("td.legend.left.value").text());
 
 					shotsAway = Integer.parseInt(
 							stats.select("tr:contains(Shots on target)").get(1).select("td.legend.right.value").text());
-				}
-			} catch (Exception exp) {
-					
+				} catch (Exception exp) {
 				}
 				break;
+			}
 		}
 
 		System.out.println(shotsHome + " s " + shotsAway);
@@ -848,27 +819,27 @@ public class Scraper {
 			Element tableAway = divLineups.select("div.container.right").first();
 
 			Elements rowsHome = tableHome.select("table").first().select("tr");
-			try {
-				for (int i = 1; i < rowsHome.size(); i++) {// without coach
-					Element row = rowsHome.get(i);
-					if (row.text().contains("Coach") || row.text().contains("coach") || row.text().isEmpty())
-						continue;
-	
-					Elements cols = row.select("td");
-					if (cols.size() < 2)
-						continue;
-					// String shirtNumber = cols.get(0).text();
-					String name = "";
+			for (int i = 1; i < rowsHome.size(); i++) {// without coach
+				Element row = rowsHome.get(i);
+				if (row.text().contains("Coach") || row.text().contains("coach") || row.text().isEmpty())
+					continue;
+
+				Elements cols = row.select("td");
+				if (cols.size() < 2)
+					continue;
+				// String shirtNumber = cols.get(0).text();
+				String name = "";
+				try {
 					name = Utils.replaceNonAsciiWhitespace(cols.get(cols.size() == 2 ? 0 : 1).text());
-					// System.out.println(shirtNumber + " " + name);
-					PlayerFixture pf = new PlayerFixture(fix, homeTeam, name, 90, true, false, 0, 0);
-					playerFixtures.add(pf);
-	
-					} 
 				} catch (Exception e) {
 					System.out.println("Empty column when parsing startin 11");
 					continue;
 				}
+				// System.out.println(shirtNumber + " " + name);
+				PlayerFixture pf = new PlayerFixture(fix, homeTeam, name, 90, true, false, 0, 0);
+				playerFixtures.add(pf);
+
+			}
 
 			Elements rowsAway = tableAway.select("table").first().select("tr");
 			for (int i = 1; i < rowsAway.size(); i++) {
@@ -898,92 +869,96 @@ public class Scraper {
 			Element tableAway = divSubstitutes.select("div.container.right").first();
 
 			Elements rowsHome = tableHome.select("table").first().select("tr");
-			try {
-				for (int i = 1; i < rowsHome.size(); i++) {// without coach
-															// information
-					Element row = rowsHome.get(i);
-					Elements cols = row.select("td");
-					String shirtNumber = cols.get(0).text();
-					String name = Utils.replaceNonAsciiWhitespace(cols.get(cols.size() == 2 ? 0 : 1).text());
-					if (name.contains(" for ")) {
-						String inPlayer = name.split(" for ")[0].trim();
-						String outPlayer = "";
-						
+			for (int i = 1; i < rowsHome.size(); i++) {// without coach
+														// information
+				Element row = rowsHome.get(i);
+				Elements cols = row.select("td");
+				String shirtNumber = cols.get(0).text();
+				String name = Utils.replaceNonAsciiWhitespace(cols.get(cols.size() == 2 ? 0 : 1).text());
+				if (name.contains(" for ")) {
+					String inPlayer = name.split(" for ")[0].trim();
+					String outPlayer = "";
+					try {
 						outPlayer = name.split(" for ")[1].split("[0-9]+'")[0].trim();
-						
-						int minute = 0;
+					} catch (Exception e) {
+						System.err.println("da ddassd");
+					}
+					int minute = 0;
+					try {
 						String cleanMinutes = name.split(" ")[name.split(" ").length - 1].split("'")[0];
 						if (cleanMinutes.contains("+"))
 							minute = Integer.parseInt(cleanMinutes.split("\\+")[0])
 									+ Integer.parseInt(cleanMinutes.split("\\+")[1]);
 						else
 							minute = Integer.parseInt(cleanMinutes);
-						PlayerFixture pf = new PlayerFixture(fix, homeTeam, inPlayer, 90 - minute, false, true, 0, 0);
-						playerFixtures.add(pf);
-	
-						for (PlayerFixture player : playerFixtures) {
-							if (player.name.equals(outPlayer)) {
-								player.minutesPlayed = minute;
-								break;
-							}
-						}
-	
-						if (verbose)
-							System.out.println(inPlayer + " for " + outPlayer + " in " + minute);
-	
-					} else {
-						PlayerFixture pf = new PlayerFixture(fix, homeTeam, name, 0, false, false, 0, 0);
-						playerFixtures.add(pf);
-						if (verbose)
-							System.out.println(shirtNumber + " " + name);
+					} catch (Exception e) {
+						System.out.println("parse");
 					}
-	
+					PlayerFixture pf = new PlayerFixture(fix, homeTeam, inPlayer, 90 - minute, false, true, 0, 0);
+					playerFixtures.add(pf);
+
+					for (PlayerFixture player : playerFixtures) {
+						if (player.name.equals(outPlayer)) {
+							player.minutesPlayed = minute;
+							break;
+						}
+					}
+
+					if (verbose)
+						System.out.println(inPlayer + " for " + outPlayer + " in " + minute);
+
+				} else {
+					PlayerFixture pf = new PlayerFixture(fix, homeTeam, name, 0, false, false, 0, 0);
+					playerFixtures.add(pf);
+					if (verbose)
+						System.out.println(shirtNumber + " " + name);
 				}
-			} catch (Exception e) {
-				System.err.println("da ddassd");
+
 			}
 
 			Elements rowsAway = tableAway.select("table").first().select("tr");
-			try {
-				for (int i = 1; i < rowsAway.size(); i++) {
-					Element row = rowsAway.get(i);
-					Elements cols = row.select("td");
-					String shirtNumber = cols.get(0).text();
-					String name = Utils.replaceNonAsciiWhitespace(cols.get(cols.size() == 2 ? 0 : 1).text());
-					if (name.contains(" for ")) {
-						String inPlayer = name.split(" for ")[0].trim();
-						String outPlayer = name.split(" for ")[1].split("[0-9]+'")[0].trim();
-						int minute = 0;
-							String cleanMinutes = name.split(" ")[name.split(" ").length - 1].split("'")[0];
-							if (cleanMinutes.contains("+"))
-								minute = Integer.parseInt(cleanMinutes.split("\\+")[0])
-										+ Integer.parseInt(cleanMinutes.split("\\+")[1]);
-							else
-								minute = Integer.parseInt(cleanMinutes);
-	
-						PlayerFixture pf = new PlayerFixture(fix, awayTeam, inPlayer, 90 - minute, false, true, 0, 0);
-						playerFixtures.add(pf);
-	
-						for (PlayerFixture player : playerFixtures) {
-							if (player.name.equals(outPlayer)) {
-								player.minutesPlayed = minute;
-								break;
-							}
-						}
-						if (verbose)
-							System.out.println(inPlayer + " for " + outPlayer + " in " + minute);
-	
-					} else {
-						PlayerFixture pf = new PlayerFixture(fix, awayTeam, name, 0, false, false, 0, 0);
-						playerFixtures.add(pf);
-						if (verbose)
-							System.out.println(shirtNumber + " " + name);
+			for (int i = 1; i < rowsAway.size(); i++) {
+				Element row = rowsAway.get(i);
+				Elements cols = row.select("td");
+				String shirtNumber = cols.get(0).text();
+				String name = Utils.replaceNonAsciiWhitespace(cols.get(cols.size() == 2 ? 0 : 1).text());
+				if (name.contains(" for ")) {
+					String inPlayer = name.split(" for ")[0].trim();
+					String outPlayer = name.split(" for ")[1].split("[0-9]+'")[0].trim();
+					int minute = 0;
+					try {
+						String cleanMinutes = name.split(" ")[name.split(" ").length - 1].split("'")[0];
+						if (cleanMinutes.contains("+"))
+							minute = Integer.parseInt(cleanMinutes.split("\\+")[0])
+									+ Integer.parseInt(cleanMinutes.split("\\+")[1]);
+						else
+							minute = Integer.parseInt(cleanMinutes);
+					} catch (Exception e) {
+						System.out.println("parse");
 					}
-	
+
+					PlayerFixture pf = new PlayerFixture(fix, awayTeam, inPlayer, 90 - minute, false, true, 0, 0);
+					playerFixtures.add(pf);
+
+					for (PlayerFixture player : playerFixtures) {
+						if (player.name.equals(outPlayer)) {
+							player.minutesPlayed = minute;
+							break;
+						}
+					}
+					if (verbose)
+						System.out.println(inPlayer + " for " + outPlayer + " in " + minute);
+
+				} else {
+					PlayerFixture pf = new PlayerFixture(fix, awayTeam, name, 0, false, false, 0, 0);
+					playerFixtures.add(pf);
+					if (verbose)
+						System.out.println(shirtNumber + " " + name);
 				}
-			} catch (Exception e) {
-				System.out.println("parse");
+
 			}
+
+		}
 
 		// Goals and assists
 		// ========================================================================================
@@ -1178,7 +1153,8 @@ public class Scraper {
 			WebElement pagin = driver.findElement(By.xpath("//*[@id='pagination']"));
 			List<WebElement> spans = pagin.findElements(By.tagName("span"));
 			for (WebElement i : spans) {
-				if (isNumeric(i.getText()) && Integer.parseInt(i.getText().trim()) > maxPage) {
+				if (isNumeric(i.getText())) {
+					if (Integer.parseInt(i.getText().trim()) > maxPage)
 						maxPage = Integer.parseInt(i.getText().trim());
 				}
 			}
@@ -1187,8 +1163,8 @@ public class Scraper {
 		}
 		//
 
-		try {
-			 for (int page = 1; page <= maxPage; page++) {
+		for (int page = 1; page <= maxPage; page++) {
+			try {
 				driver.navigate().to(address + "/results/#/page/" + page + "/");
 
 				String[] splitAddress = address.split("/");
@@ -1212,10 +1188,8 @@ public class Scraper {
 						result.add(ef);
 
 				}
-			}
-		} catch (Exception e) {
-				System.out.println("Something was wrong");
-				//e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
 				page--;
 				System.out.println("Starting over from page:" + page);
 				driver.close();
@@ -1228,6 +1202,7 @@ public class Scraper {
 				login(driver);
 				driver.navigate().to(address + "/results/");
 			}
+		}
 
 		driver.close();
 
@@ -1249,7 +1224,7 @@ public class Scraper {
 
 		Set<FullFixture> result = new HashSet<>();
 
-		System.setProperty("webdriver.chrome.drive", "chromedriver.exe");
+		System.setProperty("webdriver.chrome.drive", "C:/Windows/system32/chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
@@ -1270,15 +1245,17 @@ public class Scraper {
 			WebElement pagin = driver.findElement(By.xpath("//*[@id='pagination']"));
 			List<WebElement> spans = pagin.findElements(By.tagName("span"));
 			for (WebElement i : spans) {
-				if (isNumeric(i.getText()) && Integer.parseInt(i.getText().trim()) > maxPage) {
-					maxPage = Integer.parseInt(i.getText().trim());
+				if (isNumeric(i.getText())) {
+					if (Integer.parseInt(i.getText().trim()) > maxPage)
+						maxPage = Integer.parseInt(i.getText().trim());
+				}
 			}
 		} catch (Exception e) {
 
 		}
 
-		try {
-			 for (int page = 1; page <= maxPage; page++) {
+		for (int page = 1; page <= maxPage; page++) {
+			try {
 				driver.navigate().to(address + "/results/#/page/" + page + "/");
 
 				String[] splitAddress = address.split("/");
@@ -1302,10 +1279,8 @@ public class Scraper {
 					// break;
 
 				}
-			}
-		} catch (Exception e) {
-				System.out.println("Something was wrong");
-				//e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
 				page--;
 				System.out.println("Starting over from page:" + page);
 				driver.close();
@@ -1318,6 +1293,7 @@ public class Scraper {
 				login(driver);
 				driver.navigate().to(address + "/results/");
 			}
+		}
 
 		driver.close();
 
@@ -1341,7 +1317,7 @@ public class Scraper {
 			for (String line : lines)
 				pass += (line.trim());
 		} catch (IOException e) {
-			System.out.println("Something was wrong");
+			System.out.println(e);
 		}
 
 		driver.findElement(By.id("login-username1")).sendKeys("Vortex84");
@@ -1362,13 +1338,13 @@ public class Scraper {
 
 		Set<ExtendedFixture> result = new HashSet<>();
 
-		System.setProperty("webdriver.chrome.drive", "chromedriver.exe");
+		System.setProperty("webdriver.chrome.drive", "C:/Windows/system32/chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 
-		try {
-			 while (true) {
+		while (true) {
+			try {
 				driver.navigate().to(address + "/results/#/page/" + page + "/");
 
 				String[] splitAddress = address.split("/");
@@ -1391,23 +1367,21 @@ public class Scraper {
 
 				}
 				break;
-			} 
-		} catch (Exception e) {
-				System.out.println("Something was wrong");
-				//e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
 				System.out.println("Starting over from page:" + page);
 				driver.close();
 				try {
 					Thread.sleep(10000);
 				} catch (Exception e2) {
-					System.out.println("Something was wrong");
-					//e2.printStackTrace();
+					e2.printStackTrace();
 					System.out.println("Thread sleep problem");
 				}
 				driver = new ChromeDriver();
 				driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 				driver.manage().window().maximize();
 			}
+		}
 
 		driver.close();
 
@@ -1441,8 +1415,10 @@ public class Scraper {
 			WebElement pagin = driver.findElement(By.xpath("//*[@id='pagination']"));
 			List<WebElement> spans = pagin.findElements(By.tagName("span"));
 			for (WebElement i : spans) {
-				if (isNumeric(i.getText()) && Integer.parseInt(i.getText().trim()) > maxPage) {
-					maxPage = Integer.parseInt(i.getText().trim());
+				if (isNumeric(i.getText())) {
+					if (Integer.parseInt(i.getText().trim()) > maxPage)
+						maxPage = Integer.parseInt(i.getText().trim());
+				}
 			}
 		} catch (Exception e) {
 
@@ -1479,7 +1455,7 @@ public class Scraper {
 
 		Set<ExtendedFixture> result = new HashSet<>();
 
-		System.setProperty("webdriver.chrome.drive", "chromedriver.exe");
+		System.setProperty("webdriver.chrome.drive", "C:/Windows/system32/chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
@@ -1489,12 +1465,14 @@ public class Scraper {
 		int maxPage = 1;
 		List<WebElement> pages = driver.findElements(By.cssSelector("a[href*='#/page/']"));
 		for (WebElement i : pages) {
-			if (isNumeric(i.getText()) && Integer.parseInt(i.getText().trim()) > maxPage)
-				maxPage = Integer.parseInt(i.getText().trim());
+			if (isNumeric(i.getText())) {
+				if (Integer.parseInt(i.getText().trim()) > maxPage)
+					maxPage = Integer.parseInt(i.getText().trim());
+			}
 		}
 
-		try {
-			 for (int page = 1; page <= maxPage; page++) {
+		for (int page = 1; page <= maxPage; page++) {
+			try {
 				driver.navigate().to(address + "/results/#/page/" + page + "/");
 
 				String[] splitAddress = address.split("/");
@@ -1516,10 +1494,8 @@ public class Scraper {
 					break;
 
 				}
-			} 
-		} catch (Exception e) {
-				System.out.println("Something was wrong");
-				//e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
 				page--;
 				System.out.println("Starting over from page:" + page);
 				driver.close();
@@ -1528,6 +1504,7 @@ public class Scraper {
 				driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 				driver.manage().window().maximize();
 			}
+		}
 
 		driver.close();
 
@@ -1625,31 +1602,33 @@ public class Scraper {
 		Result htResult = new Result(-1, -1);
 		try {
 			WebElement resElement = driver.findElement(By.xpath("//*[@id='event-status']/p"));
-				if(resElement != null)
-					String resString = resElement.getText();
-				if (resElement != null && (resString.contains("penalties") || resString.contains("ET") || resString.contains("Postponed"))) {
+			if (resElement != null) {
+				String resString = resElement.getText();
+				if (resString.contains("penalties") || resString.contains("ET") || resString.contains("Postponed")) {
 					return null;
 				}
-				if (resElement != null && ((!liveMatchesFlag && resString.contains("already started")) || resString.contains("Abandoned"))) {
+
+				if ((!liveMatchesFlag && resString.contains("already started")) || resString.contains("Abandoned")) {
 					return null;
 				}
-				if (resElement != null && (resString.contains("awarded") && resString.contains(home))) {
+				if (resString.contains("awarded") && resString.contains(home)) {
 					fullResult = new Result(3, 0);
 					htResult = new Result(3, 0);
-				}
-				if (resElement != null && (resString.contains("awarded") && resString.contains(away))) {
+				} else if (resString.contains("awarded") && resString.contains(away)) {
 					fullResult = new Result(0, 3);
 					htResult = new Result(0, 3);
-				}
-				if (resElement != null && (resString.contains("(") && resString.contains(")"))) {
+				} else if (resString.contains("(") && resString.contains(")")) {
 					String full = resString.split(" ")[2];
 					String half = resString.split(" ")[3].substring(1, 4);
+
 					fullResult = new Result(Integer.parseInt(full.split(":")[0]), Integer.parseInt(full.split(":")[1]));
 					htResult = new Result(Integer.parseInt(half.split(":")[0]), Integer.parseInt(half.split(":")[1]));
 				} else {
 					fullResult = new Result(-1, -1);
 					htResult = new Result(-1, -1);
 				}
+			}
+
 		} catch (Exception e) {
 			System.out.println("next match");
 		}
@@ -1670,9 +1649,9 @@ public class Scraper {
 		if (pinnIndex < 0) {
 			System.out.println("Could not find pinnacle");
 			pinnIndex = Index365;
+			if (pinnIndex < 0)
+				pinnIndex = 1;
 		}
-		if (pinnIndex < 0 && pinnIndex < 0)
-			pinnIndex = 1;
 
 		float homeOdds = Float
 				.parseFloat(table.findElement(By.xpath("//div[1]/table/tbody/tr[" + pinnIndex + "]/td[2]")).getText());
@@ -1689,36 +1668,34 @@ public class Scraper {
 		float overOdds = -1f, underOdds = -1f;
 		float overOdds365 = -1f, underOdds365 = -1f;
 		List<WebElement> tabs = driver.findElements(By.xpath("//*[@id='bettype-tabs']/ul/li"));
-		try {
-			for (WebElement t : tabs) {
-				if (t.getText().contains("O/U")) {
+		for (WebElement t : tabs) {
+			if (t.getText().contains("O/U")) {
+				try {
 					t.click();
-					break;
+				} catch (Exception e) {
+					System.out.println("click error o/u");
+					e.printStackTrace();
 				}
+				break;
 			}
-		} catch (Exception e) {
-			System.out.println("click error o/u");
-			System.out.println("Something was wrong");
-			//e.printStackTrace();
 		}
 
 		WebElement div25 = null;
 		List<WebElement> divs = driver.findElements(By.xpath("//*[@id='odds-data-table']/div"));
-		try {
-			for (WebElement div : divs) {
-				if (div.getText().contains("+2.5")) {
-					// System.out.println(div.getText());
-					div25 = div;
+		for (WebElement div : divs) {
+			if (div.getText().contains("+2.5")) {
+				// System.out.println(div.getText());
+				div25 = div;
+				try {
 					JavascriptExecutor jse = (JavascriptExecutor) driver;
 					jse.executeScript("window.scrollBy(0,250)", "");
 					div.click();
-					break;
+				} catch (Exception e) {
+					System.out.println("click error o/u 2.5");
+					e.printStackTrace();
 				}
+				break;
 			}
-		} catch (Exception e) {
-			System.out.println("click error o/u 2.5");
-			System.out.println("Something was wrong");
-			//e.printStackTrace();
 		}
 
 		if (div25 != null) {
@@ -1775,7 +1752,7 @@ public class Scraper {
 				}
 			}
 
-			if (Float.compare(overOdds, -1f)==0) {
+			if (overOdds == -1f) {
 				overOdds = overOdds365;
 				underOdds = underOdds365;
 			}
@@ -1785,35 +1762,35 @@ public class Scraper {
 		// System.out.println("over: " + overOdds + " " + underOdds);
 
 		// Asian handicap
-		try {
-			for (WebElement t : tabs) {
-				if (t.getText().contains("AH")) {
+		for (WebElement t : tabs) {
+			if (t.getText().contains("AH")) {
+				try {
 					t.click();
-					break;
+				} catch (Exception e) {
+					System.out.println("click error AH");
 				}
+				break;
 			}
-		} catch (Exception e) {
-			System.out.println("click error AH");
 		}
 
 		// Asian with closest line
 		WebElement opt = null;
 		float min = 100f;
 		List<WebElement> divsAsian = driver.findElements(By.xpath("//*[@id='odds-data-table']/div"));
-		try {
-			for (WebElement div : divsAsian) {
-				String text = div.getText();
-				if (text.split("\n").length > 3) {
+		for (WebElement div : divsAsian) {
+			String text = div.getText();
+			if (text.split("\n").length > 3) {
+				try {
 					float diff = Math.abs(Float.parseFloat(text.split("\n")[2].trim())
 							- Float.parseFloat(text.split("\n")[3].trim()));
-				}
-				if (text.split("\n").length > 3 && diff < min) {
-					min = diff;
-					opt = div;
+					if (diff < min) {
+						min = diff;
+						opt = div;
+					}
+				} catch (Exception e) {
+					System.out.println("asian problem" + home + " " + away);
 				}
 			}
-		} catch (Exception e) {
-			System.out.println("asian problem" + home + " " + away);
 		}
 
 		float line = -1f, asianHome = -1f, asianAway = -1f;
@@ -1824,8 +1801,7 @@ public class Scraper {
 				actions.moveToElement(opt).click().perform();
 			} catch (Exception e) {
 				System.out.println("click error ah line ==");
-				System.out.println("Something was wrong");
-				//e.printStackTrace();
+				e.printStackTrace();
 			}
 
 			WebElement AHTable = opt.findElement(By.xpath("//table"));
@@ -1873,26 +1849,27 @@ public class Scraper {
 		Result htResult = new Result(-1, -1);
 		try {
 			WebElement resElement = driver.findElement(By.xpath("//*[@id='event-status']/p"));
-			String resString = resElement.getText();
-			if (resElement != null && (resString.contains("penalties") || resString.contains("ET"))) {
-				return null;
-			}
-			if (resElement != null && (resString.contains("awarded") && resString.contains(home))) {
-				fullResult = new Result(3, 0);
-				htResult = new Result(3, 0);
-			}
-			if (resElement != null && (resString.contains("awarded") && resString.contains(away))) {
-				fullResult = new Result(0, 3);
-				htResult = new Result(0, 3);
-			}
-			if (resElement != null && (resString.contains("(") && resString.contains(")"))) {
-				String full = resString.split(" ")[2];
-				String half = resString.split(" ")[3].substring(1, 4);
-				fullResult = new Result(Integer.parseInt(full.split(":")[0]), Integer.parseInt(full.split(":")[1]));
-				htResult = new Result(Integer.parseInt(half.split(":")[0]), Integer.parseInt(half.split(":")[1]));
-			} else {
-				fullResult = new Result(-1, -1);
-				htResult = new Result(-1, -1);
+			if (resElement != null) {
+				String resString = resElement.getText();
+				if (resString.contains("penalties") || resString.contains("ET")) {
+					return null;
+				}
+				if (resString.contains("awarded") && resString.contains(home)) {
+					fullResult = new Result(3, 0);
+					htResult = new Result(3, 0);
+				} else if (resString.contains("awarded") && resString.contains(away)) {
+					fullResult = new Result(0, 3);
+					htResult = new Result(0, 3);
+				} else if (resString.contains("(") && resString.contains(")")) {
+					String full = resString.split(" ")[2];
+					String half = resString.split(" ")[3].substring(1, 4);
+
+					fullResult = new Result(Integer.parseInt(full.split(":")[0]), Integer.parseInt(full.split(":")[1]));
+					htResult = new Result(Integer.parseInt(half.split(":")[0]), Integer.parseInt(half.split(":")[1]));
+				} else {
+					fullResult = new Result(-1, -1);
+					htResult = new Result(-1, -1);
+				}
 			}
 
 		} catch (Exception e) {
@@ -1926,20 +1903,20 @@ public class Scraper {
 		WebElement opt = null;
 		float min = 100f;
 		List<WebElement> divsAsian = driver.findElements(By.xpath("//*[@id='odds-data-table']/div"));
-		try {
-			for (WebElement div : divsAsian) {
-				String text = div.getText();
-				if (text.split("\n").length > 3) {
+		for (WebElement div : divsAsian) {
+			String text = div.getText();
+			if (text.split("\n").length > 3) {
+				try {
 					float diff = Math.abs(Float.parseFloat(text.split("\n")[2].trim())
 							- Float.parseFloat(text.split("\n")[3].trim()));
-				}
-				if (text.split("\n").length > 3 && diff < min) {
-					min = diff;
-					opt = div;
+					if (diff < min) {
+						min = diff;
+						opt = div;
+					}
+				} catch (Exception e) {
+					// System.out.println("asian problem" + home + " " + away);
 				}
 			}
-		} catch (Exception e) {
-			// System.out.println("asian problem" + home + " " + away);
 		}
 
 		int indexOfOptimal = opt == null ? -1 : divsAsian.indexOf(opt);
@@ -1950,61 +1927,59 @@ public class Scraper {
 			int lower = (indexOfOptimal - 5) < 0 ? 0 : (indexOfOptimal - 5);
 			int higher = (indexOfOptimal + 5) > (divsAsian.size() - 1) ? (divsAsian.size() - 1) : (indexOfOptimal + 5);
 
-			try {
-				for (int j = lower; j <= higher; j++) {
-					WebElement currentDiv = divsAsian.get(j);
-					if (currentDiv == null || currentDiv.getText().split("\n").length < 3)
+			for (int j = lower; j <= higher; j++) {
+				WebElement currentDiv = divsAsian.get(j);
+				if (currentDiv == null || currentDiv.getText().split("\n").length < 3)
+					continue;
+
+				// currentDiv.click();
+				Actions actions = new Actions(driver);
+				actions.moveToElement(currentDiv).click().perform();
+
+				WebElement AHTable = currentDiv.findElement(By.xpath("//table"));
+
+				List<WebElement> rowsGoals = AHTable.findElements(By.xpath("//tbody/tr"));
+				float line = -1f, home = -1f, away = -1f;
+
+				Odds pinnOdds = null;
+
+				ArrayList<Odds> matchOdds = new ArrayList<>();
+				for (WebElement row : rowsGoals) {
+					String rowText = row.getText();
+					if (row.getText().contains("Average"))
+						break;
+					String[] oddsArray = rowText.split("\n");
+					// System.out.println(rowText);
+					if (oddsArray.length != 5)
 						continue;
-	
-					// currentDiv.click();
-					Actions actions = new Actions(driver);
-					actions.moveToElement(currentDiv).click().perform();
-	
-					WebElement AHTable = currentDiv.findElement(By.xpath("//table"));
-	
-					List<WebElement> rowsGoals = AHTable.findElements(By.xpath("//tbody/tr"));
-					float line = -1f, home = -1f, away = -1f;
-	
-					Odds pinnOdds = null;
-	
-					ArrayList<Odds> matchOdds = new ArrayList<>();
-					for (WebElement row : rowsGoals) {
-						String rowText = row.getText();
-						if (row.getText().contains("Average"))
-							break;
-						String[] oddsArray = rowText.split("\n");
-						// System.out.println(rowText);
-						if (oddsArray.length != 5)
-							continue;
-						String bookmaker = oddsArray[0].trim();
-	
-						if (Arrays.asList(MinMaxOdds.FAKEBOOKS).contains(bookmaker) || bookmaker.isEmpty())
-							continue;
-	
-						
+					String bookmaker = oddsArray[0].trim();
+
+					if (Arrays.asList(MinMaxOdds.FAKEBOOKS).contains(bookmaker) || bookmaker.isEmpty())
+						continue;
+
+					try {
 						line = Float.parseFloat(oddsArray[1].trim());
 						home = Float.parseFloat(oddsArray[2].trim());
 						away = Float.parseFloat(oddsArray[3].trim());
-						
-	
-						Odds modds = new AsianOdds(bookmaker, new Date(), line, home, away);
-						matchOdds.add(modds);
-	
-						if (bookmaker.equals("Pinnacle"))
-							pinnOdds = modds;
-	
+					} catch (Exception e) {
+						continue;
 					}
-	
-					checkValueOverPinnacleOdds(matchOdds, pinnOdds);
-	
-					List<WebElement> closeLink = currentDiv.findElements(By.className("odds-co"));
-					if (!closeLink.isEmpty()) {
-						actions.moveToElement(closeLink.get(0)).click().perform();
-					}
-	
+
+					Odds modds = new AsianOdds(bookmaker, new Date(), line, home, away);
+					matchOdds.add(modds);
+
+					if (bookmaker.equals("Pinnacle"))
+						pinnOdds = modds;
+
 				}
-			} catch (Exception e) {
-				continue;
+
+				checkValueOverPinnacleOdds(matchOdds, pinnOdds);
+
+				List<WebElement> closeLink = currentDiv.findElements(By.className("odds-co"));
+				if (!closeLink.isEmpty()) {
+					actions.moveToElement(closeLink.get(0)).click().perform();
+				}
+
 			}
 		}
 		System.out.println("asian total time " + (System.currentTimeMillis() - start) / 1000d + "sec");
@@ -2053,20 +2028,20 @@ public class Scraper {
 		WebElement optGoals = null;
 		float minGoals = 100f;
 		List<WebElement> divsGoals = driver.findElements(By.xpath("//*[@id='odds-data-table']/div"));
-		try {
-			for (WebElement div : divsGoals) {
-				String text = div.getText();
-				if (text.split("\n").length > 3) {
-						float diff = Math.abs(Float.parseFloat(text.split("\n")[2].trim())
-								- Float.parseFloat(text.split("\n")[3].trim()));					
-				}
-				if (text.split("\n").length > 3 && diff < minGoals) {
-					minGoals = diff;
-					optGoals = div;
+		for (WebElement div : divsGoals) {
+			String text = div.getText();
+			if (text.split("\n").length > 3) {
+				try {
+					float diff = Math.abs(Float.parseFloat(text.split("\n")[2].trim())
+							- Float.parseFloat(text.split("\n")[3].trim()));
+					if (diff < minGoals) {
+						minGoals = diff;
+						optGoals = div;
+					}
+				} catch (Exception e) {
+					// System.out.println("asian problem" + home + " " + away);
 				}
 			}
-		} catch (Exception e) {
-				// System.out.println("asian problem" + home + " " + away);
 		}
 
 		int indexOfOptimalGoals = optGoals == null ? -1 : divsGoals.indexOf(optGoals);
@@ -2094,34 +2069,34 @@ public class Scraper {
 			Odds pinnOdds = null;
 
 			ArrayList<Odds> matchOdds = new ArrayList<>();
-			try {
-				for (WebElement row : rowsGoals) {
-					String rowText = row.getText();
-					if (row.getText().contains("Average"))
-						break;
-					String[] oddsArray = rowText.split("\n");
-					// System.out.println(rowText);
-					if (oddsArray.length != 5)
-						continue;
-					String bookmaker = oddsArray[0].trim();
-	
-					if (Arrays.asList(MinMaxOdds.FAKEBOOKS).contains(bookmaker) || bookmaker.isEmpty())
-						continue;
-	
+			for (WebElement row : rowsGoals) {
+				String rowText = row.getText();
+				if (row.getText().contains("Average"))
+					break;
+				String[] oddsArray = rowText.split("\n");
+				// System.out.println(rowText);
+				if (oddsArray.length != 5)
+					continue;
+				String bookmaker = oddsArray[0].trim();
+
+				if (Arrays.asList(MinMaxOdds.FAKEBOOKS).contains(bookmaker) || bookmaker.isEmpty())
+					continue;
+
+				try {
 					line = Float.parseFloat(oddsArray[1].trim());
 					over = Float.parseFloat(oddsArray[2].trim());
 					under = Float.parseFloat(oddsArray[3].trim());
-					
-					Odds modds = new OverUnderOdds(bookmaker, new Date(), line, over, under);
-					matchOdds.add(modds);
-	
-					if (bookmaker.equals("Pinnacle"))
-						pinnOdds = modds;
-	
-					// System.out.println(modds);
+				} catch (Exception e) {
+					continue;
 				}
-			} catch (Exception e) {
-				continue;
+
+				Odds modds = new OverUnderOdds(bookmaker, new Date(), line, over, under);
+				matchOdds.add(modds);
+
+				if (bookmaker.equals("Pinnacle"))
+					pinnOdds = modds;
+
+				// System.out.println(modds);
 			}
 
 			checkValueOverPinnacleOdds(matchOdds, pinnOdds);
@@ -2156,27 +2131,29 @@ public class Scraper {
 		Result htResult = new Result(-1, -1);
 		try {
 			WebElement resElement = driver.findElement(By.xpath("//*[@id='event-status']/p"));
-			String resString = resElement.getText();
-			if (resElement != null && (resString.contains("penalties") || resString.contains("ET"))) {
-				return null;
+			if (resElement != null) {
+				String resString = resElement.getText();
+				if (resString.contains("penalties") || resString.contains("ET")) {
+					return null;
+				}
+				if (resString.contains("awarded") && resString.contains(home)) {
+					fullResult = new Result(3, 0);
+					htResult = new Result(3, 0);
+				} else if (resString.contains("awarded") && resString.contains(away)) {
+					fullResult = new Result(0, 3);
+					htResult = new Result(0, 3);
+				} else if (resString.contains("(") && resString.contains(")")) {
+					String full = resString.split(" ")[2];
+					String half = resString.split(" ")[3].substring(1, 4);
+
+					fullResult = new Result(Integer.parseInt(full.split(":")[0]), Integer.parseInt(full.split(":")[1]));
+					htResult = new Result(Integer.parseInt(half.split(":")[0]), Integer.parseInt(half.split(":")[1]));
+				} else {
+					fullResult = new Result(-1, -1);
+					htResult = new Result(-1, -1);
+				}
 			}
-			if (resElement != null && (resString.contains("awarded") && resString.contains(home))) {
-				fullResult = new Result(3, 0);
-				htResult = new Result(3, 0);
-			}
-			if (resElement != null && (resString.contains("awarded") && resString.contains(away))) {
-				fullResult = new Result(0, 3);
-				htResult = new Result(0, 3);
-			}
-			if (resElement != null && (resString.contains("(") && resString.contains(")"))) {
-				String full = resString.split(" ")[2];
-				String half = resString.split(" ")[3].substring(1, 4);
-				fullResult = new Result(Integer.parseInt(full.split(":")[0]), Integer.parseInt(full.split(":")[1]));
-				htResult = new Result(Integer.parseInt(half.split(":")[0]), Integer.parseInt(half.split(":")[1]));
-			} else {
-				fullResult = new Result(-1, -1);
-				htResult = new Result(-1, -1);
-			}
+
 		} catch (Exception e) {
 			System.out.println("next match");
 		}
@@ -2230,23 +2207,25 @@ public class Scraper {
 		WebElement optGoals = null;
 		float minGoals = 100f;
 		List<WebElement> divsGoals = driver.findElements(By.xpath("//*[@id='odds-data-table']/div"));
-		try {
-			for (WebElement div : divsGoals) {
-				String text = div.getText();
-				if (div.getText().contains("+2.5")) {
-					div25 = div;
-				}
-				if (text.split("\n").length > 3) {
+		for (WebElement div : divsGoals)
+
+		{
+			String text = div.getText();
+			if (div.getText().contains("+2.5")) {
+				div25 = div;
+			}
+			if (text.split("\n").length > 3) {
+				try {
 					float diff = Math.abs(Float.parseFloat(text.split("\n")[2].trim())
 							- Float.parseFloat(text.split("\n")[3].trim()));
-				}
-				if (text.split("\n").length > 3 && diff < minGoals) {
-					minGoals = diff;
-					optGoals = div;
+					if (diff < minGoals) {
+						minGoals = diff;
+						optGoals = div;
+					}
+				} catch (Exception e) {
+					// System.out.println("asian problem" + home + " " + away);
 				}
 			}
-		} catch (Exception e) {
-			// System.out.println("asian problem" + home + " " + away);
 		}
 
 		int indexOfOptimalGoals = optGoals == null ? -1 : divsGoals.indexOf(optGoals);
@@ -2293,9 +2272,9 @@ public class Scraper {
 
 				if (over != -1f) {
 					goalLines.add(new main.Line(line, over, under, "Pinn"));
+					if (line == 2.5)
+						twoAndHalf = new main.Line(line, over, under, "Pinn");
 				}
-				if (over != -1f && Float.compare(line, 2.5f)==0)
-					twoAndHalf = new main.Line(line, over, under, "Pinn");
 
 				List<WebElement> closeLink = currentDiv.findElements(By.className("odds-co"));
 				if (!closeLink.isEmpty()) {
@@ -2327,42 +2306,46 @@ public class Scraper {
 			if (goalLines.size() == 5) {
 				GLS = new GoalLines(goalLines.get(0), goalLines.get(1), goalLines.get(2), goalLines.get(3),
 						goalLines.get(4));
-			}
-			if (goalLines.size()  && expectedCaseSize == 5) {
-				ArrayList<main.Line> bestLines = new ArrayList<>();
-				for (int c = start; c <= end; c++) {
-					bestLines.add(goalLines.get(c));
-				}
+			} else if (goalLines.size() > 5) {
+				if (expectedCaseSize == 5) {
+					ArrayList<main.Line> bestLines = new ArrayList<>();
+					for (int c = start; c <= end; c++) {
+						bestLines.add(goalLines.get(c));
+					}
+
 					GLS = new GoalLines(bestLines.get(0), bestLines.get(1), bestLines.get(2), bestLines.get(3),
-						bestLines.get(4));
+							bestLines.get(4));
+
+				} else if (expectedCaseSize == 4) {
+					if (indexMinDiff - 2 < 0) {
+						GLS = new GoalLines(goalLines.get(indexMinDiff - 1), goalLines.get(indexMinDiff),
+								goalLines.get(indexMinDiff + 1), goalLines.get(indexMinDiff + 2),
+								goalLines.get(indexMinDiff + 3));
+					} else if (indexMinDiff + 2 > goalLines.size() - 1) {
+						GLS = new GoalLines(goalLines.get(indexMinDiff - 3), goalLines.get(indexMinDiff - 2),
+								goalLines.get(indexMinDiff - 1), goalLines.get(indexMinDiff),
+								goalLines.get(indexMinDiff + 1));
+					} else {
+						System.out.println("tuka");
+					}
+
+				} else {
+					System.out.println("tuka");
 				}
-			if (goalLines.size()  && expectedCaseSize == 4 && indexMinDiff - 2 < 0) {
-				GLS = new GoalLines(goalLines.get(indexMinDiff - 1), goalLines.get(indexMinDiff),
-						goalLines.get(indexMinDiff + 1), goalLines.get(indexMinDiff + 2),
-						goalLines.get(indexMinDiff + 3));
-			}
-			if (goalLines.size()  && expectedCaseSize == 4 && indexMinDiff - 2 >= 0 && indexMinDiff + 2 > goalLines.size() - 1) {
-				GLS = new GoalLines(goalLines.get(indexMinDiff - 3), goalLines.get(indexMinDiff - 2),
-						goalLines.get(indexMinDiff - 1), goalLines.get(indexMinDiff),
-						goalLines.get(indexMinDiff + 1));
 			} else {
-				System.out.println("tuka");
-			}
-			
-			if (expectedCaseSize != 4)
-				System.out.println("tuka");
-			if (goalLines.size() <= 5 && goalLines.size() == 4 && indexMinDiff - 2 < 0) {
-				GLS = new GoalLines(new main.Line(-1, -1, -1, "Pinn"), goalLines.get(0), goalLines.get(1),
-						goalLines.get(2), goalLines.get(3));
-			} else {
-				GLS = new GoalLines(goalLines.get(0), goalLines.get(1), goalLines.get(2), goalLines.get(3),
-					  new main.Line(-1, -1, -1, "Pinn"));
-			}
-			
-			if (goalLines.size() <= 5 && goalLines.size() == 1)
-				GLS.main = goalLines.get(0);
-			if (goalLines.size() <= 5 && goalLines.size() != 4) {
-				System.out.println("tuka");
+				if (goalLines.size() == 4) {
+					if (indexMinDiff - 2 < 0) {
+						GLS = new GoalLines(new main.Line(-1, -1, -1, "Pinn"), goalLines.get(0), goalLines.get(1),
+								goalLines.get(2), goalLines.get(3));
+					} else {
+						GLS = new GoalLines(goalLines.get(0), goalLines.get(1), goalLines.get(2), goalLines.get(3),
+								new main.Line(-1, -1, -1, "Pinn"));
+					}
+				} else {
+					if (goalLines.size() == 1)
+						GLS.main = goalLines.get(0);
+					System.out.println("tuka");
+				}
 			}
 
 			if (twoAndHalf == null) {
@@ -2373,18 +2356,18 @@ public class Scraper {
 
 				// getFirstResult for over 2.5 if pinaccle lacks the line
 				List<WebElement> rowsGoals = goalLineTable.findElements(By.xpath("//tbody/tr"));
-			} 
-			if (twoAndHalf == null && rowsGoals.size() >= 2) {
-				WebElement row = rowsGoals.get(1);
-				String textOdds = row.getText();
-				try {
-					overOdds = Float.parseFloat(textOdds.split("\n")[2].trim());
-					underOdds = Float.parseFloat(textOdds.split("\n")[3].trim());
-				} catch (Exception e) {
 
+				if (rowsGoals.size() >= 2) {
+					WebElement row = rowsGoals.get(1);
+					String textOdds = row.getText();
+					try {
+						overOdds = Float.parseFloat(textOdds.split("\n")[2].trim());
+						underOdds = Float.parseFloat(textOdds.split("\n")[3].trim());
+					} catch (Exception e) {
+
+					}
 				}
-			}
-			if (twoAndHalf != null) {
+			} else {
 				for (main.Line line : goalLines) {
 					if (line.line == 2.5) {
 						overOdds = line.home;
@@ -2414,20 +2397,22 @@ public class Scraper {
 		WebElement opt = null;
 		float min = 100f;
 		List<WebElement> divsAsian = driver.findElements(By.xpath("//*[@id='odds-data-table']/div"));
-		try {
-			for (WebElement div : divsAsian) {
-				String text = div.getText();
-				if (text.split("\n").length > 3) {
+		for (WebElement div : divsAsian)
+
+		{
+			String text = div.getText();
+			if (text.split("\n").length > 3) {
+				try {
 					float diff = Math.abs(Float.parseFloat(text.split("\n")[2].trim())
 							- Float.parseFloat(text.split("\n")[3].trim()));
-				}
-				if (text.split("\n").length > 3 && diff < min) {
-					min = diff;
-					opt = div;
+					if (diff < min) {
+						min = diff;
+						opt = div;
+					}
+				} catch (Exception e) {
+					// System.out.println("asian problem" + home + " " + away);
 				}
 			}
-		} catch (Exception e) {
-			// System.out.println("asian problem" + home + " " + away);
 		}
 
 		int indexOfOptimal = opt == null ? -1 : divsAsian.indexOf(opt);
@@ -2501,43 +2486,46 @@ public class Scraper {
 			int expectedCaseSize = end - start + 1;
 			if (lines.size() == 5) {
 				asianLines = new AsianLines(lines.get(0), lines.get(1), lines.get(2), lines.get(3), lines.get(4));
-			}
-			//if (lines.size() > 5) 
-			if (lines.size() > 5 && expectedCaseSize == 5) {
-				ArrayList<main.Line> bestLines = new ArrayList<>();
-				for (int c = start; c <= end; c++) {
-					bestLines.add(lines.get(c));
+			} else if (lines.size() > 5) {
+				if (expectedCaseSize == 5) {
+					ArrayList<main.Line> bestLines = new ArrayList<>();
+					for (int c = start; c <= end; c++) {
+						bestLines.add(lines.get(c));
 					}
-				asianLines = new AsianLines(lines.get(0), lines.get(1), lines.get(2), lines.get(3), lines.get(4));
-				} 
-			if (lines.size() > 5 && expectedCaseSize == 4 && indexMinDiff - 2 < 0) {
-				asianLines = new AsianLines(lines.get(indexMinDiff - 1), lines.get(indexMinDiff),
-						lines.get(indexMinDiff + 1), lines.get(indexMinDiff + 2), lines.get(indexMinDiff + 3));
-			} 
-			if (lines.size() > 5 && expectedCaseSize == 4 && indexMinDiff + 2 > lines.size() - 1) {
-				asianLines = new AsianLines(lines.get(indexMinDiff - 3), lines.get(indexMinDiff - 2),
-						lines.get(indexMinDiff - 1), lines.get(indexMinDiff), lines.get(indexMinDiff + 1));
+
+					asianLines = new AsianLines(lines.get(0), lines.get(1), lines.get(2), lines.get(3), lines.get(4));
+
+				} else if (expectedCaseSize == 4) {
+					if (indexMinDiff - 2 < 0) {
+						asianLines = new AsianLines(lines.get(indexMinDiff - 1), lines.get(indexMinDiff),
+								lines.get(indexMinDiff + 1), lines.get(indexMinDiff + 2), lines.get(indexMinDiff + 3));
+					} else if (indexMinDiff + 2 > lines.size() - 1) {
+						asianLines = new AsianLines(lines.get(indexMinDiff - 3), lines.get(indexMinDiff - 2),
+								lines.get(indexMinDiff - 1), lines.get(indexMinDiff), lines.get(indexMinDiff + 1));
+					} else {
+						System.out.println("tuka");
+					}
+
+				} else {
+					System.out.println("tuka");
+				}
 			} else {
-				System.out.println("tuka");
+				if (lines.size() == 4) {
+					if (indexMinDiff - 2 < 0) {
+						asianLines = new AsianLines(new main.Line(-1, -1, -1, "Pinn"), lines.get(0), lines.get(1),
+								lines.get(2), lines.get(3));
+					} else {
+						asianLines = new AsianLines(lines.get(0), lines.get(1), lines.get(2), lines.get(3),
+								new main.Line(-1, -1, -1, "Pinn"));
+					}
+				} else {
+					if (lines.size() == 1)
+						asianLines.main = lines.get(0);
+					System.out.println("tuka");
+				}
 			}
-			
-			if(lines.size() <= 5 || expectedCaseSize != 4) {
-				System.out.println("tuka");
-			}
-			if (lines.size() == 4 && indexMinDiff - 2 < 0) {
-				asianLines = new AsianLines(new main.Line(-1, -1, -1, "Pinn"), lines.get(0), lines.get(1),
-						lines.get(2), lines.get(3));
-			} 
-			if(lines.size() == 4 && indexMinDiff - 2 >= 0) {
-				asianLines = new AsianLines(lines.get(0), lines.get(1), lines.get(2), lines.get(3),
-						new main.Line(-1, -1, -1, "Pinn"));
-			} 
-			if (lines.size() != 4 && lines.size() == 1)
-				asianLines.main = lines.get(0);
-			if (lines.size() <= 5 && lines.size() != 4)
-				System.out.println("tuka");
 		}
-		
+
 		ExtendedFixture ef = new FullFixture(date, home, away, fullResult, competition).withHTResult(htResult)
 				.with1X2Odds(-1f, -1f, -1f).withAsian(asianLines.main.line, asianLines.main.home, asianLines.main.away)
 				.withOdds(overOdds, underOdds, overOdds, underOdds).withShots(-1, -1);
@@ -2648,12 +2636,10 @@ public class Scraper {
 			if (resString.contains("awarded") && resString.contains(home)) {
 				fullResult = new Result(3, 0);
 				htResult = new Result(3, 0);
-			}
-			if (resString.contains("awarded") && resString.contains(away)) {
+			} else if (resString.contains("awarded") && resString.contains(away)) {
 				fullResult = new Result(0, 3);
 				htResult = new Result(0, 3);
-			}
-			if (resString.contains("(") && resString.contains(")")) {
+			} else if (resString.contains("(") && resString.contains(")")) {
 				String full = resString.split(" ")[2];
 				String half = resString.split(" ")[3].substring(1, 4);
 
@@ -2694,9 +2680,9 @@ public class Scraper {
 		if (pinnIndex < 0) {
 			System.out.println("Could not find pinnacle");
 			pinnIndex = Index365;
+			if (pinnIndex < 0)
+				pinnIndex = 2;
 		}
-		if (pinnIndex < 0)
-			pinnIndex = 2;
 
 		float homeOdds = Float
 				.parseFloat(table.findElement(By.xpath("//div[1]/table/tbody/tr[" + pinnIndex + "]/td[2]")).getText());
@@ -2757,20 +2743,20 @@ public class Scraper {
 		WebElement opt = null;
 		float min = 100f;
 		List<WebElement> divsAsian = driver.findElements(By.xpath("//*[@id='odds-data-table']/div"));
-		try {
-			for (WebElement div : divsAsian) {
-				String text = div.getText();
-				if (text.split("\n").length > 3) {
+		for (WebElement div : divsAsian) {
+			String text = div.getText();
+			if (text.split("\n").length > 3) {
+				try {
 					float diff = Math.abs(Float.parseFloat(text.split("\n")[2].trim())
 							- Float.parseFloat(text.split("\n")[3].trim()));
-				}
-				if (text.split("\n").length > 3 && diff < min) {
-					min = diff;
-					opt = div;
+					if (diff < min) {
+						min = diff;
+						opt = div;
+					}
+				} catch (Exception e) {
+					System.out.println("asian problem" + home + " " + away);
 				}
 			}
-		} catch (Exception e) {
-			System.out.println("asian problem" + home + " " + away);
 		}
 
 		float line = -1f, asianHome = -1f, asianAway = -1f;

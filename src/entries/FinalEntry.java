@@ -3,41 +3,13 @@ package entries;
 import main.ExtendedFixture;
 import main.Result;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class FinalEntry implements Comparable<FinalEntry> {
-    /**
-     * This field sets the variable of class ExtendedFixture
-     */
 	public ExtendedFixture fixture;
-    /**
-     * This field sets the variable of class Float
-     */
 	public Float prediction;
-    /**
-     * This field sets the variable of class Result
-     */
 	public Result result;
-    /**
-     * This field sets the float variable
-     */
 	public float threshold;
-    /**
-     * This field sets the float variable
-     */
 	public float upper;
-    /**
-     * This field sets the float variable
-     */
 	public float lower;
-    /**
-     * This field sets the float variable
-     */
 	public float value;
 
 	public FinalEntry(ExtendedFixture fixture, float prediction, Result result, float threshold, float lower,

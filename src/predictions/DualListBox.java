@@ -34,14 +34,6 @@ import main.Test.DataType;
 import predictions.Predictions.OnlyTodayMatches;
 import scraper.Scraper;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
-
 public class DualListBox extends JPanel {
 
 	private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0);

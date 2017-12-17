@@ -7,17 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class Names {
-    /**
-     * This field sets the hashmap with map
-     */
+
 	public static final HashMap<String, HashMap<String, String>> map = new HashMap<>();
 
 	static {

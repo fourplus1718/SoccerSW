@@ -38,13 +38,6 @@ import utils.Utils;
 import xls.AsianUtils;
 import xls.XlSUtils;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class Test {
 
 	public static void main(String[] args) throws JSONException, IOException, InterruptedException, ExecutionException {
@@ -223,25 +216,14 @@ public class Test {
 		String base = new File("").getAbsolutePath();
 		// ArrayList<String> dont = new
 		// ArrayList<String>(Arrays.asList(MinMaxOdds.DONT));
-		try {
-			FileInputStream file;
-			if (!parsedLeagues)
-				file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-			else
-				file = new FileInputStream(new File(base + "\\data\\fullodds" + year + ".xls"));
-	
-			HSSFWorkbook workbook = new HSSFWorkbook(file);
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+
+		FileInputStream file;
+		if (!parsedLeagues)
+			file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
+		else
+			file = new FileInputStream(new File(base + "\\data\\fullodds" + year + ".xls"));
+
+		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		Iterator<Sheet> sheet = workbook.sheetIterator();
 		float totalProfit = 0.0f;
 
@@ -268,6 +250,7 @@ public class Test {
 		}
 		System.out.println("Total profit for season " + year + " is " + String.format("%.2f", totalProfit));
 		workbook.close();
+		file.close();
 		pool.shutdown();
 		return totalProfit;
 	}
@@ -275,24 +258,13 @@ public class Test {
 	public static float asian(int year, boolean parsedLeagues)
 			throws IOException, InterruptedException, ExecutionException {
 		String base = new File("").getAbsolutePath();
-		try {
-			FileInputStream file;
-			if (!parsedLeagues)
-				file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-			else
-				file = new FileInputStream(new File(base + "\\data\\odds" + year + ".xls"));
-			HSSFWorkbook workbook = new HSSFWorkbook(file);
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+
+		FileInputStream file;
+		if (!parsedLeagues)
+			file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
+		else
+			file = new FileInputStream(new File(base + "\\data\\odds" + year + ".xls"));
+		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		Iterator<Sheet> sheet = workbook.sheetIterator();
 		float totalProfit = 0.0f;
 
@@ -315,30 +287,20 @@ public class Test {
 		}
 		System.out.println("Total profit for season " + year + " is " + String.format("%.2f", totalProfit));
 		workbook.close();
+		file.close();
 		pool.shutdown();
 		return totalProfit;
 	}
 
 	public static float draws(int year, boolean b) throws IOException, InterruptedException, ExecutionException {
 		String base = new File("").getAbsolutePath();
-		try {
-			FileInputStream file;
-			if (!b)
-				file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-			else
-				file = new FileInputStream(new File(base + "\\data\\odds" + year + ".xls"));
-			HSSFWorkbook workbook = new HSSFWorkbook(file);
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+
+		FileInputStream file;
+		if (!b)
+			file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
+		else
+			file = new FileInputStream(new File(base + "\\data\\odds" + year + ".xls"));
+		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		Iterator<Sheet> sheet = workbook.sheetIterator();
 		float totalProfit = 0.0f;
 
@@ -361,28 +323,16 @@ public class Test {
 		}
 		System.out.println("Total profit for season " + year + " is " + String.format("%.2f", totalProfit));
 		workbook.close();
+		file.close();
 		pool.shutdown();
 		return totalProfit;
 	}
 
 	public static float asianFinals(int year) throws IOException, InterruptedException, ExecutionException {
 		String base = new File("").getAbsolutePath();
-		
-		FileInputStream file;
-		try {
-			file = new FileInputStream(
-					new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+
+		FileInputStream file = new FileInputStream(
+				new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
 		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		Iterator<Sheet> sheet = workbook.sheetIterator();
 		ArrayList<AsianEntry> all = new ArrayList<>();
@@ -412,6 +362,7 @@ public class Test {
 		// System.out.println("Total profit for season " + year + " is " +
 		// String.format("%.2f", totalProfit));
 		workbook.close();
+		file.close();
 		pool.shutdown();
 		return totalProfit;
 	}
@@ -422,21 +373,8 @@ public class Test {
 		for (int year = 2005; year <= 2015; year++) {
 			float total = 0f;
 			String base = new File("").getAbsolutePath();
-			FileInputStream file;
-			try {
-				file = new FileInputStream(
-						new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-			} catch (Exception e) {
-				System.out.println("Something was wrong");
-			} finally {
-				if (file != null) {
-					try {
-						file.close (); // OK
-					} catch (java.io.IOException e3) {
-						System.out.println("I/O Exception");
-	               }
-				}
-			}
+			FileInputStream file = new FileInputStream(
+					new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
 			HSSFWorkbook workbook = new HSSFWorkbook(file);
 			Iterator<Sheet> sheet = workbook.sheetIterator();
 			while (sheet.hasNext()) {
@@ -450,6 +388,7 @@ public class Test {
 			}
 			System.out.println("Total for " + year + ": " + total);
 			workbook.close();
+			file.close();
 			totalTotal += total;
 		}
 		System.out.println("Avg is: " + totalTotal / 11);
@@ -508,20 +447,8 @@ public class Test {
 	public static final void aggregateInterval() throws IOException, InterruptedException, ExecutionException {
 		ArrayList<String> dont = new ArrayList<String>(Arrays.asList(MinMaxOdds.DONT));
 		String base = new File("").getAbsolutePath();
-		FileInputStream file;
-		try {
-			file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + 2014 + "-" + 2015 + ".xls"));
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+		FileInputStream file = new FileInputStream(
+				new File(base + "\\data\\all-euro-data-" + 2014 + "-" + 2015 + ".xls"));
 
 		ExecutorService pool = Executors.newFixedThreadPool(7);
 		ArrayList<Future<Settings>> threadArray = new ArrayList<Future<Settings>>();
@@ -538,27 +465,15 @@ public class Test {
 			fd.get();
 
 		workbook.close();
+		file.close();
 		pool.shutdown();
 	}
 
 	public static final void aggregate(int year, int n) throws IOException, InterruptedException, ExecutionException {
 		ArrayList<String> dont = new ArrayList<String>(Arrays.asList(MinMaxOdds.DONT));
 		String base = new File("").getAbsolutePath();
-		FileInputStream file;
-		try {
-			file = new FileInputStream(
-					new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+		FileInputStream file = new FileInputStream(
+				new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
 
 		ExecutorService pool = Executors.newFixedThreadPool(3);
 		ArrayList<Future<Settings>> threadArray = new ArrayList<Future<Settings>>();
@@ -599,6 +514,7 @@ public class Test {
 		// System.out.println("Total for " + year + " : " + totalProfit);
 
 		workbook.close();
+		file.close();
 		pool.shutdown();
 	}
 
@@ -606,21 +522,8 @@ public class Test {
 		for (int year = 2005; year <= 2015; year++) {
 			String base = new File("").getAbsolutePath();
 
-			FileInputStream file;
-			try {
-				file = new FileInputStream(
-						new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-			} catch (Exception e) {
-				System.out.println("Something was wrong");
-			} finally {
-				if (file != null) {
-					try {
-						file.close (); // OK
-					} catch (java.io.IOException e3) {
-						System.out.println("I/O Exception");
-	               }
-				}
-			}
+			FileInputStream file = new FileInputStream(
+					new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
 			HSSFWorkbook workbook = new HSSFWorkbook(file);
 			HSSFSheet sheet = workbook.getSheet("E0");
 			ArrayList<ExtendedFixture> all = XlSUtils.selectAllAll(sheet);
@@ -630,6 +533,7 @@ public class Test {
 			Utils.byWeekDay(all);
 			System.out.println();
 			workbook.close();
+			file.close();
 		}
 	}
 
@@ -638,25 +542,14 @@ public class Test {
 		String base = new File("").getAbsolutePath();
 		// ArrayList<String> dont = new
 		// ArrayList<String>(Arrays.asList(MinMaxOdds.DONT));
-		try {
-			FileInputStream file;
-			if (alleurodata.equals(DataType.ALLEURODATA))
-				file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-			else
-				file = new FileInputStream(new File(base + "\\data\\odds" + year + ".xls"));
-	
-			HSSFWorkbook workbook = new HSSFWorkbook(file);
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+
+		FileInputStream file;
+		if (alleurodata.equals(DataType.ALLEURODATA))
+			file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
+		else
+			file = new FileInputStream(new File(base + "\\data\\odds" + year + ".xls"));
+
+		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		Iterator<Sheet> sheet = workbook.sheetIterator();
 		float totalProfit = 0.0f;
 
@@ -685,6 +578,7 @@ public class Test {
 		}
 		System.out.println("Total profit for season " + year + " is " + String.format("%.2f", totalProfit));
 		workbook.close();
+		file.close();
 		pool.shutdown();
 		return totalProfit;
 	}
@@ -694,25 +588,13 @@ public class Test {
 		String base = new File("").getAbsolutePath();
 		ArrayList<String> dont = new ArrayList<String>(Arrays.asList(MinMaxOdds.DONT));
 		ArrayList<String> draw = new ArrayList<String>(Arrays.asList(MinMaxOdds.DRAW));
-		
-		try {
-			FileInputStream file;
-			if (type.equals(DataType.ALLEURODATA))
-				file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-			else
-				file = new FileInputStream(new File(base + "\\data\\odds" + year + ".xls"));
-			HSSFWorkbook workbook = new HSSFWorkbook(file);
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+
+		FileInputStream file;
+		if (type.equals(DataType.ALLEURODATA))
+			file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
+		else
+			file = new FileInputStream(new File(base + "\\data\\odds" + year + ".xls"));
+		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		Iterator<Sheet> sheet = workbook.sheetIterator();
 		ArrayList<FinalEntry> all = new ArrayList<>();
 
@@ -736,6 +618,7 @@ public class Test {
 		}
 
 		workbook.close();
+		file.close();
 		pool.shutdown();
 
 		// Utils.predictionCorrelation(all);
@@ -762,23 +645,9 @@ public class Test {
 		// ArrayList<String> dont = new
 		// ArrayList<String>(Arrays.asList(MinMaxOdds.DONT));
 
-		FileInputStream file;
-		try {
-			file = new FileInputStream(
-					new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-			HSSFWorkbook workbook = new HSSFWorkbook(file);
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
-		
+		FileInputStream file = new FileInputStream(
+				new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
+		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		Iterator<Sheet> sheet = workbook.sheetIterator();
 		float totalProfit = 0.0f;
 
@@ -798,6 +667,7 @@ public class Test {
 		}
 		System.out.println("Total profit for season " + year + " is " + String.format("%.2f", totalProfit));
 		workbook.close();
+		file.close();
 		pool.shutdown();
 		return totalProfit;
 	}
@@ -810,23 +680,10 @@ public class Test {
 			float total = 0f;
 			ExecutorService pool = Executors.newFixedThreadPool(1);
 			ArrayList<Future<Float>> threadArray = new ArrayList<Future<Float>>();
-			FileInputStream filedata;
-			try {
-				filedata = new FileInputStream(
-						new File(basePath + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-				HSSFWorkbook workbookdata = new HSSFWorkbook(filedata);
-			} catch (Exception e) {
-				System.out.println("Something was wrong");
-			} finally {
-				if (filedata != null) {
-					try {
-						filedata.close (); // OK
-					} catch (java.io.IOException e3) {
-						System.out.println("I/O Exception");
-	               }
-				}
-			}
-			
+			FileInputStream filedata = new FileInputStream(
+					new File(basePath + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
+			HSSFWorkbook workbookdata = new HSSFWorkbook(filedata);
+
 			Iterator<Sheet> sh = workbookdata.sheetIterator();
 			while (sh.hasNext()) {
 				HSSFSheet i = (HSSFSheet) sh.next();
@@ -843,6 +700,7 @@ public class Test {
 			totalTotal += total;
 			workbookdata.close();
 			pool.shutdown();
+			filedata.close();
 		}
 		System.out.println("Average is:" + totalTotal / 11);
 	}
@@ -855,22 +713,9 @@ public class Test {
 
 		for (int year = 2015; year <= 2015; year++) {
 
-			FileInputStream filedata;
-			try {
-				filedata = new FileInputStream(
-						new File(basePath + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-				HSSFWorkbook workbookdata = new HSSFWorkbook(filedata);
-			} catch (Exception e) {
-				System.out.println("Something was wrong");
-			} finally {
-				if (filedata != null) {
-					try {
-						filedata.close (); // OK
-					} catch (java.io.IOException e3) {
-						System.out.println("I/O Exception");
-	               }
-				}
-			}
+			FileInputStream filedata = new FileInputStream(
+					new File(basePath + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
+			HSSFWorkbook workbookdata = new HSSFWorkbook(filedata);
 
 			Iterator<Sheet> sh = workbookdata.sheetIterator();
 			while (sh.hasNext()) {
@@ -886,6 +731,7 @@ public class Test {
 			}
 
 			workbookdata.close();
+			filedata.close();
 		}
 
 		// for (java.util.Map.Entry<String, ArrayList<Settings>> league :
@@ -901,22 +747,9 @@ public class Test {
 
 		for (int year = 2006; year <= 2015; year++) {
 			float total = 0f;
-			FileInputStream filedata;
-			try {
-				filedata = new FileInputStream(
-						new File(basePath + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-				HSSFWorkbook workbookdata = new HSSFWorkbook(filedata);
-			} catch (Exception e) {
-				System.out.println("Something was wrong");
-			} finally {
-				if (filedata != null) {
-					try {
-						filedata.close (); // OK
-					} catch (java.io.IOException e3) {
-						System.out.println("I/O Exception");
-	               }
-				}
-			}
+			FileInputStream filedata = new FileInputStream(
+					new File(basePath + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
+			HSSFWorkbook workbookdata = new HSSFWorkbook(filedata);
 
 			Iterator<Sheet> sh = workbookdata.sheetIterator();
 			while (sh.hasNext()) {
@@ -980,40 +813,14 @@ public class Test {
 
 	public static void makePredictions() throws IOException, InterruptedException, ParseException {
 		String basePath = new File("").getAbsolutePath();
-		FileInputStream file;
-		try {
-			file = new FileInputStream(new File("fixtures.xls"));
-			HSSFWorkbook workbook = new HSSFWorkbook(file);
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
-		
+		FileInputStream file = new FileInputStream(new File("C:\\Users\\Tereza\\Desktop\\fixtures.xls"));
+		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		HSSFSheet sheet = workbook.getSheetAt(0);
 		ArrayList<ExtendedFixture> fixtures = XlSUtils.selectForPrediction(sheet);
 
-		FileInputStream filedata;
-		try {
-			filedata = new FileInputStream(new File("all-euro-data-2015-2016.xls"));
-			HSSFWorkbook workbookdata = new HSSFWorkbook(filedata);
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (filedata != null) {
-				try {
-					filedata.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+		FileInputStream filedata = new FileInputStream(
+				new File("C:\\Users\\Tereza\\Desktop\\all-euro-data-2015-2016.xls"));
+		HSSFWorkbook workbookdata = new HSSFWorkbook(filedata);
 
 		HashMap<String, Settings> optimal = new HashMap<>();
 		Iterator<Sheet> sh = workbookdata.sheetIterator();
@@ -1033,39 +840,13 @@ public class Test {
 
 	public static void asianPredictions() throws IOException, InterruptedException, ParseException {
 		String basePath = new File("").getAbsolutePath();
-		FileInputStream file;
-		try {
-			file = new FileInputStream(new File("fixtures.xls"));
-			HSSFWorkbook workbook = new HSSFWorkbook(file);
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
-		
+		FileInputStream file = new FileInputStream(new File("C:\\Users\\Tereza\\Desktop\\fixtures.xls"));
+		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		HSSFSheet sheet = workbook.getSheetAt(0);
 		ArrayList<ExtendedFixture> fixtures = XlSUtils.selectForPrediction(sheet);
 
-		FileInputStream filedata;
-		try {
-			filedata = new FileInputStream(new File("all-euro-data-2015-2016.xls"));
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (filedata != null) {
-				try {
-					filedata.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+		FileInputStream filedata = new FileInputStream(
+				new File("C:\\Users\\Tereza\\Desktop\\all-euro-data-2015-2016.xls"));
 		HSSFWorkbook workbookdata = new HSSFWorkbook(filedata);
 
 		ArrayList<AsianEntry> all = new ArrayList<>();

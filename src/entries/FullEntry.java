@@ -3,17 +3,8 @@ package entries;
 import main.ExtendedFixture;
 import main.Result;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class FullEntry extends FinalEntry {
-    /**
-     * This field sets the variable of class main.Line
-     */
+
 	public main.Line line;
 
 	public FullEntry(ExtendedFixture fixture, float prediction, Result result, float threshold, float lower,
@@ -28,30 +19,32 @@ public class FullEntry extends FinalEntry {
 		if (line.line == -1f)
 			return "missing  data";
 
-		if (prediction >= upper && diff >= 0.5f){
-			return "W";
-		} else if (prediction >= upper && Float.compare(diff, 0.25f)==0) {
-			return "HW";
-		} else if (prediction >= upper && Float.compare(diff, 0f)==0) {
-			return "D";
-		} else if (prediction >= upper && Float.compare(diff, -0.25f)==0) {
-			return "HL";
+		if (prediction >= upper) {
+			if (diff >= 0.5f)
+				return "W";
+			else if (diff == 0.25f) {
+				return "HW";
+			} else if (diff == 0f) {
+				return "D";
+			} else if (diff == -0.25f) {
+				return "HL";
+			} else {
+				return "L";
+			}
 		} else {
-			return "L";
-		}
-		if (prediction < upper && diff >= 0.5f){
-			return "L";
-		} else if (prediction < upper && Float.compare(diff, 0.25f)==0) {
-			return "HL";
-		} else if (prediction < upper && Float.compare(diff, 0f)==0) {
-			return "D";
-		} else if (prediction < upper && Float.compare(diff, -0.25f)==0) {
-			return "HW";
-		} else {
-			return "W";
+			if (diff >= 0.5f)
+				return "L";
+			else if (diff == 0.25f) {
+				return "HL";
+			} else if (diff == 0f) {
+				return "D";
+			} else if (diff == -0.25f) {
+				return "HW";
+			} else {
+				return "W";
+			}
 		}
 	}
-
 
 	public float getProfit() {
 		if (line.line == -1f)

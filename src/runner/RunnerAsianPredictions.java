@@ -7,21 +7,9 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import xls.AsianUtils;
 import xls.XlSUtils;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class RunnerAsianPredictions implements Callable<Float> {
-    /**
-     * This field sets the variable of class HSSFSheet
-     */
+
 	public HSSFSheet sh;
-    /**
-     * This field sets the int variable
-     */
 	public int year;
 
 	public RunnerAsianPredictions(HSSFSheet sh, int year) {

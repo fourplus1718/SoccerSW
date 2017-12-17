@@ -1,36 +1,11 @@
 package settings;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class SettingsAsian {
-    /**
-     * This field sets the variable of class String
-     */
 	public String league;
-    /**
-     * This field sets the int variable
-     */
 	public int year;
-    /**
-     * This field sets the float variable
-     */
 	public float basic;
-    /**
-     * This field sets the float variable
-     */
 	public float poisson;
-    /**
-     * This field sets the float variable
-     */
 	public float expectancy;
-    /**
-     * This field sets the float variable
-     */
 	public float profit;
 
 	public SettingsAsian(String league, int year, float basic, float poisson, float expectancy, float profit) {

@@ -4,13 +4,6 @@ import java.util.ArrayList;
 
 import entries.FinalEntry;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class Stats {
 
 	String description;

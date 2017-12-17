@@ -8,13 +8,6 @@ import org.jfree.ui.RefineryUtilities;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class LineChart extends ApplicationFrame {
 	public LineChart(float[] data, String description) {
 		super("Profit " + description);

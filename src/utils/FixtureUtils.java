@@ -12,14 +12,6 @@ import main.ExtendedFixture;
 import main.Result;
 import settings.Settings;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
-
 public class FixtureUtils {
 
 	/**

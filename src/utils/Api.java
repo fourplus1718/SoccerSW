@@ -10,27 +10,11 @@ import org.json.JSONObject;
 
 import main.ExtendedFixture;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
-
 public class Api {
 
-    /**
-     * This field sets the timeframe
-     */
 	public static final String TIMEFRAME = "?timeFrame=";
-    /**
-     * This field sets the web site
-     */
 	public static final String BASE = "http://api.football-data.org/alpha/";
-    /**
-     * This field sets the array for fixtures
-     */
+
 	public static JSONArray getFixtures(int period) throws JSONException, IOException {
 		JSONObject obj = new JSONObject(Utils.query(BASE + "fixtures/" + TIMEFRAME + "n" + period));
 		return obj.getJSONArray("fixtures");
@@ -57,9 +41,6 @@ public class Api {
 	// }
 
 	// finds fixtures that will be played in the next 7 days
-    /**
-     * This field sets the ArrayList for find fixtures
-     */
 	public static ArrayList<ExtendedFixture> findFixtures(int period)
 			throws JSONException, IOException, ParseException {
 		JSONArray arr = getFixtures(period);

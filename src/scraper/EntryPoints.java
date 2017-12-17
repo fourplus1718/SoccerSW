@@ -6,71 +6,32 @@ import java.util.HashMap;
 
 import org.omg.CORBA.Current;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
-
 public class EntryPoints {
-    /**
-     * This field sets the current year
-     */
 	public static final int CURRENT = 2017;
-    /**
-     * This field sets the summer current year
-     */
+
 	public static final int SUMMERCURRENT = 2017;
-    /**
-     * This field sets the array with tracking
-     */
+
 	public static final String[] TRACKING = { "ENG", "ENG2", "ENG3", "ENG4", "ENG5", "IT", "IT2", "FR", "FR2", "SPA",
 			"SPA2", "GER", "GER2", "SCO", "NED", "BEL", "SWI", "POR", "GRE", "TUR", "BUL",
 			"RUS", /* "AUS", "DEN", "CZE", "ARG", "POL", "CRO", */
 			/* "SLO", */ "SWE", "USA", "FIN" /* "ICE" */, "BRA", "BRB", /* "NOR" */ };
-    /**
-     * This field sets the array with summer leagues
-     */
+
 	public static final String[] SUMMER = { "SWE", "USA", "FIN", "ICE", "BRA", "BRB", "NOR" };
-    /**
-     * This field sets the array with merged leagues
-     */
+
 	public static final String[] MERGED = { "FR2", "BEL", "SWI", "E0", "ENG", "SPA", "SPA2", "GER", "GER2", "FR", "IT",
 			"SCO", "IT2", "TUR", "ENG2", "ENG3", "ENG4", "ENG5", "ARG", "GRE", "POR", "NED", "BUL", "RUS", "AUS", "DEN",
 			"CZE", "POL", "CRO", "SLO", "SLK" };
-    /**
-     * This field sets the array with hyphen odds
-     */
 	public static final String[] HYPHENODDS = { "ENG", "SWI", "SPA", "SPA2", "GER", "GER2", "FR", "IT", "SCO", "IT2",
 			"TUR", "ENG2", "ENG3", "ENG4", "ENG5", "ARG", "GRE", "POR", "NED", "BUL", "RUS", "AUS", "DEN", "CZE", "POL",
 			"CRO", "SLO", "SLK" };
 
-    /**
-     * This field sets the array with exceptions
-     */
 	public static final String[] EXCEPTIONS = { "SCO" };
-    /**
-     * This field sets the array second stages
-     */
 	public static final String[] SECONDSTAGES = { /* "BEL" */ "SCO", "BUL" };
-    /**
-     * This field sets the hashmap with map
-     */
+
 	public static HashMap<String, String> map = new HashMap<>();
-    /**
-     * This field sets the hashmap with odds
-     */
 	public static HashMap<String, String> odds = new HashMap<>();
 
-    /**
-     * This field sets the web site soccer
-     */
 	public static final String SOCCERBASE = "http://int.soccerway.com";
-    /**
-     * This field sets the web site odds
-     */
 	public static final String ODDSBASE = "http://www.oddsportal.com/soccer/";
 
 	static {

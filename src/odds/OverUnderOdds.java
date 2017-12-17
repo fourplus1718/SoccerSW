@@ -2,25 +2,10 @@ package odds;
 
 import java.util.Date;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class OverUnderOdds extends Odds {
-    /**
-     * This field sets the float variable
-     */
+
 	public float line;
-    /**
-     * This field sets the float variable
-     */
 	public float overOdds;
-    /**
-     * This field sets the float variable
-     */
 	public float underOdds;
 
 	public OverUnderOdds(String bookmaker, Date date, float line, float overOdds, float underOdds) {

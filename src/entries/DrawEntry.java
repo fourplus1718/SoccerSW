@@ -2,26 +2,10 @@ package entries;
 
 import main.ExtendedFixture;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
-
 public class DrawEntry {
-    /**
-     * This field sets the variable of class ExtendedFixture
-     */
+
 	public ExtendedFixture fixture;
-    /**
-     * This field sets the boolean variable
-     */
 	public boolean prediction;
-    /**
-     * This field sets the float variable
-     */
 	public float expectancy;
 
 	public DrawEntry(ExtendedFixture fixture, boolean prediction, float expectancy) {

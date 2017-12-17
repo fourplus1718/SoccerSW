@@ -13,62 +13,41 @@ import java.util.stream.Collectors;
 import constants.MinMaxOdds;
 import utils.Utils;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class Results {
-    /**
-     * This field sets the array with leagues
-     */
+
 	public static final String[] LEAGUES = { "E0", "E1", "E2", "E3", "EC", "SC0", "SC1", "SC2", "SC3", "D1", "D2",
 			"SP1", "SP2", "I1", "I2", "F1", "F2", "B1", "N1", "P1", "T1", "G1" };
 
 	public static void eval(String name) throws IOException {
 		HashMap<Integer, Map<String, Float>> results = new HashMap<>();
 
-		try {
-			BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Tereza\\Desktop\\" + name + ".txt"));
-			String line = br.readLine();
-			int count = 0;
+		BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Tereza\\Desktop\\" + name + ".txt"));
+		String line = br.readLine();
+		int count = 0;
 
-			while (line != null) {
-				if (line.startsWith("Profit")) {
-					String[] split = line.split(" ");
-					String league = split[3];
-					int year = Integer.parseInt(split[4]);
-					float profit = Float.parseFloat(split[6].replace(",", "."));
-					float yield = Float.NaN;
-					if (split.length > 7) {
-						yield = Float.parseFloat(split[9].replace(",", ".").substring(0, split[9].length() - 1)) / 100;
-						count += Math.round((profit / yield));
-					}
-	
-					if (results.containsKey(year)) {
-						results.get(year).put(league, profit);
-					} else {
-						results.put(year, new HashMap<String, Float>());
-						results.get(year).put(league, profit);
-					}
+		while (line != null) {
+			if (line.startsWith("Profit")) {
+				String[] split = line.split(" ");
+				String league = split[3];
+				int year = Integer.parseInt(split[4]);
+				float profit = Float.parseFloat(split[6].replace(",", "."));
+				float yield = Float.NaN;
+				if (split.length > 7) {
+					yield = Float.parseFloat(split[9].replace(",", ".").substring(0, split[9].length() - 1)) / 100;
+					count += Math.round((profit / yield));
 				}
-				line = br.readLine();
-			} 
-		} catch (Exception e) {
-				System.out.println("Something was wrong");
-		} finally {
-				if (br != null) {
-					try {
-						br.close (); // OK
-					} catch (java.io.IOException e3) {
-						System.out.println("I/O Exception");
-	               }
+
+				if (results.containsKey(year)) {
+					results.get(year).put(league, profit);
+				} else {
+					results.put(year, new HashMap<String, Float>());
+					results.get(year).put(league, profit);
 				}
+			}
+			line = br.readLine();
 		}
-	
-			//br.close();
+
+		br.close();
 
 		System.out.println("Count: " + count);
 		stats(results, count);

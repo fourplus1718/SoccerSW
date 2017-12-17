@@ -30,17 +30,8 @@ import settings.Settings;
 import utils.Utils;
 import xls.XlSUtils;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class Predictions {
-    /**
-     * This field sets the array with chechlist
-     */
+
 	public static ArrayList<String> CHECKLIST = new ArrayList<>();
 
 	public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
@@ -95,27 +86,15 @@ public class Predictions {
 	public static ArrayList<FinalEntry> predictions(int year, DataType type, UpdateType automatic,
 			OnlyTodayMatches onlyToday, int day, int month)
 					throws InterruptedException, ExecutionException, IOException {
-		try {
-			String base = new File("").getAbsolutePath();
-	
-			FileInputStream file = null;
-			if (type.equals(DataType.ALLEURODATA))
-				file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-			else if (type.equals(DataType.ODDSPORTAL))
-				file = new FileInputStream(new File(base + "\\data\\odds" + year + ".xls"));
-	
-			HSSFWorkbook workbook = new HSSFWorkbook(file);
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+		String base = new File("").getAbsolutePath();
+
+		FileInputStream file = null;
+		if (type.equals(DataType.ALLEURODATA))
+			file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
+		else if (type.equals(DataType.ODDSPORTAL))
+			file = new FileInputStream(new File(base + "\\data\\odds" + year + ".xls"));
+
+		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		Iterator<Sheet> sheet = workbook.sheetIterator();
 		ArrayList<FinalEntry> all = new ArrayList<>();
 
@@ -142,6 +121,7 @@ public class Predictions {
 		// System.out.println("Total profit for season " + year + " is " +
 		// String.format("%.2f", totalProfit));
 		workbook.close();
+		file.close();
 		pool.shutdown();
 
 		all.sort(Comparator.comparing(FinalEntry::getPrediction));
@@ -179,9 +159,7 @@ public class Predictions {
 			if (Utils.getProfit(Utils.allUnders(Utils.onlyFixtures(equilibriumsData))) > 0f) {
 				allUnders = true;
 				Utils.printStats(Utils.allUnders(Utils.onlyFixtures(equilibriumsData)), "Equilibriums as unders");
-			}
-			if (Utils.getProfit(Utils.allUnders(Utils.onlyFixtures(equilibriumsData))) <= 0f &&
-				Utils.getProfit(Utils.allOvers(Utils.onlyFixtures(equilibriumsData))) > 0f) {
+			} else if (Utils.getProfit(Utils.allOvers(Utils.onlyFixtures(equilibriumsData))) > 0f) {
 				allOvers = true;
 				Utils.printStats(Utils.allOvers(Utils.onlyFixtures(equilibriumsData)), "Equilibriums as overs");
 			} else {
@@ -224,25 +202,14 @@ public class Predictions {
 
 	public static float asianPredictions(int year, boolean parsedLeagues)
 			throws InterruptedException, ExecutionException, IOException {
-		try {
-			String base = new File("").getAbsolutePath();
-	
-			FileInputStream file;
-			if (!parsedLeagues)
-				file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
-			else
-				file = new FileInputStream(new File(base + "\\data\\odds" + year + ".xls"));
-		} catch (Exception e) {
-			System.out.println("Something was wrong");
-		} finally {
-			if (file != null) {
-				try {
-					file.close (); // OK
-				} catch (java.io.IOException e3) {
-					System.out.println("I/O Exception");
-               }
-			}
-		}
+		String base = new File("").getAbsolutePath();
+
+		FileInputStream file;
+		if (!parsedLeagues)
+			file = new FileInputStream(new File(base + "\\data\\all-euro-data-" + year + "-" + (year + 1) + ".xls"));
+		else
+			file = new FileInputStream(new File(base + "\\data\\odds" + year + ".xls"));
+
 		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		Iterator<Sheet> sheet = workbook.sheetIterator();
 		float totalProfit = 0.0f;
@@ -267,6 +234,7 @@ public class Predictions {
 		// System.out.println("Total profit for season " + year + " is " +
 		// String.format("%.2f", totalProfit));
 		workbook.close();
+		file.close();
 		pool.shutdown();
 		return totalProfit;
 	}

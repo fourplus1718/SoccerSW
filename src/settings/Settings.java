@@ -1,92 +1,26 @@
 package settings;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class Settings {
-    /**
-     * This field sets the variable of class String
-     */
+
 	public String league;
-    /**
-     * This field sets the int variable
-     */
 	public int year;
-    /**
-     * This field sets the float variable
-     */
 	public float basic;
-    /**
-     * This field sets the float variable
-     */
 	public float poisson;
-    /**
-     * This field sets the float variable
-     */
 	public float weightedPoisson;
-    /**
-     * This field sets the float variable
-     */
 	public float htCombo;
-    /**
-     * This field sets the float variable
-     */
 	public float shots;
-    /**
-     * This field sets the float variable
-     */
 	public float similars;
-    /**
-     * This field sets the float variable
-     */
 	public float similarsPoisson;
-    /**
-     * This field sets the float variable
-     */
 	public float halfTimeOverOne;
-    /**
-     * This field sets the float variable
-     */
 	public float threshold;
-    /**
-     * This field sets the float variable
-     */
 	public float upperBound;
-    /**
-     * This field sets the float variable
-     */
 	public float lowerBound;
-    /**
-     * This field sets the float variable
-     */
 	public float successRate;
-    /**
-     * This field sets the float variable
-     */
 	public float profit;
-    /**
-     * This field sets the float variable
-     */
 	public float minUnder;
-    /**
-     * This field sets the float variable
-     */
 	public float maxUnder;
-    /**
-     * This field sets the float variable
-     */
 	public float minOver;
-    /**
-     * This field sets the float variable
-     */
 	public float maxOver;
-    /**
-     * This field sets the float variable
-     */
 	public float value;
 
 	public Settings(String league, float basic, float poisson, float weightedPoisson, float threshold, float upperBound,

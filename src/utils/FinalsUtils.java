@@ -5,14 +5,6 @@ import java.util.ArrayList;
 import entries.FinalEntry;
 import settings.Settings;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
-
 public class FinalsUtils {
 
 	public static ArrayList<FinalEntry> restrict(ArrayList<FinalEntry> finals, Settings settings) {

@@ -5,29 +5,11 @@ import java.util.Collections;
 
 import main.ExtendedFixture;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class Table {
-    /**
-     * This field sets the variable of class String
-     */
+
 	public String league;
-    /**
-     * This field sets the int variable
-     */
 	public int year;
-    /**
-     * This field sets the int variable
-     */
 	public int matchday;
-    /**
-     * This field sets the arraylist with positions
-     */
 	public ArrayList<Position> positions;
 
 	public Table(String league, int year, int matchday) {

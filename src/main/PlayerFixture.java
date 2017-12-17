@@ -1,44 +1,13 @@
 package main;
 
-/**
- * PJDCC - Summary for class responsabilities.
- *
- * @author fourplus <fourplus1718@gmail.com>
- * @since 1.0
- * @version 11 Changes done
- */
 public class PlayerFixture {
-    /**
-     * This field sets the variable of class ExtendedFixture
-     */
 	public ExtendedFixture fixture;
-    /**
-     * This field sets the variable of class String
-     */
 	public String team;
-    /**
-     * This field sets the variable of class String
-     */
 	public String name;
-    /**
-     * This field sets the int variable
-     */
 	public int minutesPlayed;
-    /**
-     * This field sets the boolean variable
-     */
 	public boolean lineup;
-    /**
-     * This field sets the boolean variable
-     */
 	public boolean substitute;
-    /**
-     * This field sets the int variable
-     */
 	public int goals;
-    /**
-     * This field sets the int variable
-     */
 	public int assists;
 
 	public PlayerFixture(ExtendedFixture fixture, String team, String name, int minutesPlayed, boolean lineup,
@@ -77,17 +46,20 @@ public class PlayerFixture {
 		if (!(obj instanceof PlayerFixture))
 			return false;
 		PlayerFixture other = (PlayerFixture) obj;
-		if (fixture == null && other.fixture != null)
+		if (fixture == null) {
+			if (other.fixture != null)
+				return false;
+		} else if (!fixture.equals(other.fixture))
 			return false;
-		if (fixture != null && !fixture.equals(other.fixture))
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
 			return false;
-		if (name == null && other.name != null)
-			return false;
-		if (name != null && !name.equals(other.name))
-			return false;
-		if (team == null && other.team != null)
-			return false;
-		if (team != null && !team.equals(other.team))
+		if (team == null) {
+			if (other.team != null)
+				return false;
+		} else if (!team.equals(other.team))
 			return false;
 		return true;
 	}
